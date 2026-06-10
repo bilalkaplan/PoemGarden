@@ -20,7 +20,7 @@ Bu proje, Web Geliştirme dersi dönemi projesi kapsamında geliştirilmiş bir 
 - **Çoklu Dil Desteği (i18n):** TR, EN, SR, DE dillerinde tam senkronizasyon.
 - **Rol Tabanlı Erişim:** Admin ve Şair (Poet) rolleri ile genişletilmiş yönetim.
 - **Gerçek Zamanlı Bildirimler:** Yorum ve yanıtlarda renk kodlu bildirim sistemi.
-- **Sosyal Paylaşım:** Şiir linklerini tek tıkla panoya kopyalama ve paylaşma.
+- **Sosyal Paylaşım & Tekil Şiir Görünümü:** Şiir linklerini kopyalama ve paylaşılan linkle direkt sadece o şiiri (Tüm Şiirleri Gör butonu ile birlikte) özel sayfada görüntüleme.
 - **Optimistic UI:** Yorum silme/düzenleme işlemlerinde anında tepki süresi.
 
 ## Kurulum Adımları
