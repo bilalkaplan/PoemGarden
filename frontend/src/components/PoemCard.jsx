@@ -88,7 +88,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
       {shouldTruncate && (
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
-          style={{ backgroundColor: 'transparent', color: COLORS.secondary, border: 'none', cursor: 'pointer', fontSize: '0.85rem', padding: '0', marginBottom: '8px' }}
+          style={{ backgroundColor: 'transparent', color: 'black', border: 'none', cursor: 'pointer', fontSize: '0.85rem', padding: '0', marginBottom: '8px' }}
         >
           {isExpanded ? t('collapse') : t('read_more')}
         </button>

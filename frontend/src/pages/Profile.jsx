@@ -292,7 +292,7 @@ function Profile() {
                       {shouldTruncate && (
                       <button 
                         onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
-                        style={{ backgroundColor: 'transparent', color: COLORS.secondary, border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
+                        style={{ backgroundColor: 'transparent', color: 'black', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
                       >
                         {isExpanded ? t('collapse') : t('read_more')}
                       </button>
