@@ -239,13 +239,13 @@ function Profile() {
                       value={editPoemData.title} 
                       onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
                       placeholder={t('poem_title')}
-                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: editPoemData.font }}
                     />
                     <textarea 
                       value={editPoemData.content} 
                       onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
                       placeholder={t('poem_content')}
-                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: editPoemData.font }}
                     />
                     <select 
                       value={editPoemData.font} 

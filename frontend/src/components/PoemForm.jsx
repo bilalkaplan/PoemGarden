@@ -35,14 +35,14 @@ function PoemForm({ onSuccess, setToast }) {
         value={newPoem.title} 
         onChange={(e) => setNewPoem({...newPoem, title: e.target.value})} 
         required
-        style={{ width: '100%', padding: '8px', marginBottom: '8px', borderRadius: '5px', border: 'none', boxSizing: 'border-box', fontSize: '0.95rem', backgroundColor: '#444', color: COLORS.primary }} 
+        style={{ width: '100%', padding: '8px', marginBottom: '8px', borderRadius: '5px', border: 'none', boxSizing: 'border-box', fontSize: '0.95rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: newPoem.font }} 
       />
       <textarea 
         placeholder={t('poem_content')} 
         value={newPoem.content} 
         onChange={(e) => setNewPoem({...newPoem, content: e.target.value})} 
         required
-        style={{ width: '100%', padding: '8px', height: '80px', borderRadius: '5px', border: 'none', marginBottom: '8px', boxSizing: 'border-box', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto' }} 
+        style={{ width: '100%', padding: '8px', height: '80px', borderRadius: '5px', border: 'none', marginBottom: '8px', boxSizing: 'border-box', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto', fontFamily: newPoem.font }} 
       />
       <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
         <select 

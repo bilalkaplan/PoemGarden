@@ -53,25 +53,27 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
       <div style={{ marginBottom: '8px' }}>
         {poem.comments && poem.comments.map(comment => (
             <div key={comment._id} style={{ backgroundColor: '#333', padding: '8px 10px', borderRadius: '5px', marginBottom: '6px', borderLeft: `2px solid ${COLORS.accent}` }}>
-                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '4px' }}>
-                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
-                  <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: COLORS.secondary }}>
-                    <small style={{ color: COLORS.secondary, fontWeight: 'bold', fontSize: '0.8rem' }}>{comment.author?.nickname}: </small>
-                  </Link>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginBottom: '4px' }}>
+                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}`, flexShrink: 0 }} />
+                  <div>
+                    <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: COLORS.secondary }}>
+                      <strong style={{ fontSize: '0.85rem' }}>{comment.author?.nickname}: </strong>
+                    </Link>
+                    <span style={{ fontSize: '0.85rem', color: COLORS.primary, wordBreak: 'break-word' }}>{comment.text}</span>
+                  </div>
                 </div>
-                <span style={{ fontSize: '0.85rem', color: COLORS.primary }}>{comment.text}</span>
                 
                 {comment.replies && comment.replies.length > 0 && (
                   <div style={{ marginTop: '6px', paddingLeft: '10px', borderLeft: `2px solid ${COLORS.tertiary}` }}>
                     {comment.replies.map(reply => (
-                      <div key={reply._id} style={{ marginBottom: '4px' }}>
-                        <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '2px' }}>
-                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
-                          <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: COLORS.tertiary }}>
-                            <small style={{ color: COLORS.tertiary, fontWeight: 'bold', fontSize: '0.75rem' }}>{reply.author?.nickname}:</small>
-                          </Link>
-                        </div>
-                        <p style={{ fontSize: '0.8rem', color: COLORS.primary, margin: '0 0 0 24px' }}>{reply.text}</p>
+                      <div key={reply._id} style={{ marginBottom: '6px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}`, flexShrink: 0 }} />
+                          <div>
+                            <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: COLORS.tertiary }}>
+                              <strong style={{ fontSize: '0.8rem' }}>{reply.author?.nickname}: </strong>
+                            </Link>
+                            <span style={{ fontSize: '0.8rem', color: COLORS.primary, wordBreak: 'break-word' }}>{reply.text}</span>
+                          </div>
                       </div>
                     ))}
                   </div>
