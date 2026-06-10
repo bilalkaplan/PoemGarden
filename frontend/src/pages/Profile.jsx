@@ -1,0 +1,288 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+
+const COLORS = {
+  primary: '#2d2d2d',
+  secondary: '#8b7355', 
+  tertiary: '#6b8e6f',
+  dark: '#919D85',
+  darkBg: '#738065',
+  accent: '#8b7355'
+};
+
+function Profile() {
+  const { t } = useTranslation();
+  const { id } = useParams();
+  const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><rect fill="%23919D85" width="24" height="24" rx="4"/><g fill="%23FFFFFF"><circle cx="12" cy="8" r="3"/><path d="M12 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/></g></svg>';
+  const [user, setUser] = useState(null);
+  const [myPoems, setMyPoems] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ firstName: '', lastName: '', bio: '', avatar: '' });
+  const [editingPoemId, setEditingPoemId] = useState(null);
+  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
+  const [expandedPoem, setExpandedPoem] = useState(null);
+  const token = localStorage.getItem('token');
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+
+  const isOwnProfile = !id || id === storedUser?._id;
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        if (isOwnProfile) {
+          if (storedUser) {
+            setUser(storedUser);
+            setEditData({ 
+              firstName: storedUser.firstName, 
+              lastName: storedUser.lastName,
+              bio: storedUser.bio || 'Edebiyat aşığı.',
+              avatar: storedUser.avatar || ''
+            });
+            fetchMyPoems(storedUser._id);
+          }
+        } else {
+          const userRes = await axios.get(`http://127.0.0.1:5000/api/auth/user/${id}`);
+          setUser(userRes.data);
+          fetchMyPoems(id);
+        }
+      } catch (err) {
+        console.error("Profil yüklenemedi:", err);
+      }
+    };
+    fetchProfile();
+  }, [id]);
+
+  const fetchMyPoems = async (userId) => {
+    try {
+      const res = await axios.get(`http://127.0.0.1:5000/api/poems?author=${userId}`);
+      setMyPoems(res.data.poems || res.data);
+    } catch (err) {
+      console.error("Şiirler yüklenemedi:", err);
+    }
+  };
+
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditData({ ...editData, avatar: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDeletePoem = async (poemId) => {
+    if (!window.confirm(t('confirm_delete') || 'Are you sure?')) return;
+    try {
+      await axios.delete(`http://127.0.0.1:5000/api/poems/${poemId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchMyPoems(storedUser._id);
+      alert(t('poem_deleted') || 'Poem deleted');
+    } catch (err) {
+      alert(t('poem_delete_failed') || 'Şiir silinirken hata oluştu.');
+    }
+  };
+
+  const handleEditPoem = (poem) => {
+    setEditingPoemId(poem._id);
+    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Arial' });
+  };
+
+  const handleUpdatePoem = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://127.0.0.1:5000/api/poems/${editingPoemId}`, editPoemData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert(t('poem_updated') || 'Poem updated');
+      setEditingPoemId(null);
+      fetchMyPoems(storedUser._id);
+    } catch (err) {
+      alert(t('poem_update_failed') || 'Şiir güncellemesi başarısız.');
+    }
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://127.0.0.1:5000/api/auth/profile`, editData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert(t('profile_updated') || 'Profile updated!');
+      const updatedUser = { 
+        ...user, 
+        firstName: editData.firstName, 
+        lastName: editData.lastName,
+        bio: editData.bio,
+        avatar: editData.avatar
+      };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setIsEditing(false);
+    } catch (err) {
+      alert(t('profile_update_failed') || 'Profile update failed.');
+    }
+  };
+
+  const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
+  const MAX_PREVIEW_LENGTH = 150;
+
+  if (!user) {
+    return <div style={{ textAlign: 'center', color: '#888', padding: '20px', fontSize: '0.9rem', backgroundColor: COLORS.dark, minHeight: '100vh' }}>Yükleniyor...</div>;
+  }
+
+  return (
+    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px 10px', color: COLORS.primary, backgroundColor: COLORS.dark, minHeight: '100vh' }}>
+      <h1 style={{ color: COLORS.primary, marginBottom: '20px', fontSize: '1.8rem' }}>{t('profile')}</h1>
+
+      <div style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '25px', borderLeft: `4px solid ${COLORS.secondary}` }}>
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start', marginBottom: '15px' }}>
+          <img src={user.avatar || DEFAULT_AVATAR} alt="Avatar" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
+          <div>
+            <h2 style={{ fontSize: '1.3rem', color: COLORS.primary, margin: 0 }}>{user.nickname}</h2>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}>{user.bio}</p>
+          </div>
+        </div>
+
+        {!isEditing || !isOwnProfile ? (
+          <>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('first_name')}:</strong> {user.firstName}</p>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('last_name')}:</strong> {user.lastName}</p>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('email')}:</strong> {user.email}</p>
+            {isOwnProfile && (
+              <button 
+                onClick={() => setIsEditing(true)} 
+                style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
+              >
+                {t('edit_profile')}
+              </button>
+            )}
+          </>
+        ) : (
+          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <input 
+              value={editData.firstName} 
+              onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
+              placeholder={t('first_name')}
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+            />
+            <input 
+              value={editData.lastName} 
+              onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
+              placeholder={t('last_name')}
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+            />
+            <textarea 
+              value={editData.bio} 
+              onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
+              placeholder={t('bio') || 'Biyografi'}
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', height: '60px', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto' }}
+            />
+            <div style={{ padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
+              <label style={{ fontSize: '0.85rem', color: COLORS.primary, display: 'block', marginBottom: '8px' }}>{t('profile_photo')}</label>
+              <input 
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                style={{ fontSize: '0.8rem', color: COLORS.primary }}
+              />
+              {editData.avatar && (
+                <img src={editData.avatar} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
+              )}
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
+              <button type="button" onClick={() => setIsEditing(false)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      <div>
+        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{isOwnProfile ? t('my_poems') || 'My Poems' : `${user.nickname}'s Poems`}</h2>
+        {myPoems.length > 0 ? (
+          myPoems.map(poem => {
+            const isExpanded = expandedPoem === poem._id;
+            const shouldTruncate = poem.content.length > MAX_PREVIEW_LENGTH;
+            const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
+            
+            return (
+              <div key={poem._id} style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
+                {editingPoemId === poem._id ? (
+                  <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input 
+                      value={editPoemData.title} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
+                      placeholder={t('poem_title')}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+                    />
+                    <textarea 
+                      value={editPoemData.content} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
+                      placeholder={t('poem_content')}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
+                    />
+                    <select 
+                      value={editPoemData.font} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
+                    >
+                      {fonts.map(font => (
+                        <option key={font} value={font} style={{ color: COLORS.primary }}>{font}</option>
+                      ))}
+                    </select>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
+                      <button type="button" onClick={() => setEditingPoemId(null)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <h3 style={{ margin: '0 0 6px 0', color: COLORS.primary, fontSize: '1.05rem' }}>{poem.title}</h3>
+                    <p style={{ fontSize: '0.9rem', color: COLORS.primary, fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '6px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '80px', overflow: 'hidden' }}>
+                      {displayContent}
+                      {shouldTruncate && !isExpanded && '...'}
+                    </p>
+                      {shouldTruncate && (
+                      <button 
+                        onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
+                        style={{ backgroundColor: 'transparent', color: COLORS.secondary, border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
+                      >
+                        {isExpanded ? t('collapse') : t('read_more')}
+                      </button>
+                    )}
+                    <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>Tarih: {new Date(poem.createdAt).toLocaleDateString('tr-TR')}</small>
+                    {isOwnProfile && (
+                      <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                        <button 
+                          onClick={() => handleEditPoem(poem)}
+                          style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                        >
+                          {t('edit')}
+                        </button>
+                        <button 
+                          onClick={() => handleDeletePoem(poem._id)}
+                          style={{ padding: '6px 12px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+                        >
+                          {t('delete')}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <p style={{ color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_poems_yet')}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Profile;
