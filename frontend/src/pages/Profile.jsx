@@ -13,7 +13,7 @@ const COLORS = {
 };
 
 function Profile() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const DEFAULT_AVATAR = "/default-avatar.svg";
   const [user, setUser] = useState(null);
@@ -173,6 +173,11 @@ function Profile() {
           <img src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
           <div>
             <h2 style={{ fontSize: '1.3rem', color: COLORS.primary, margin: 0 }}>{user.nickname}</h2>
+            {user.createdAt && (
+              <p style={{ fontSize: '0.75rem', color: '#ccc', margin: '2px 0 8px 0', fontStyle: 'italic' }}>
+                {t('joined_in', { date: new Date(user.createdAt).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }) })}
+              </p>
+            )}
             <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}>{user.bio}</p>
           </div>
         </div>

@@ -71,9 +71,11 @@ const resources = {
       "go_to_poem": "Şiire Git →",
       "comment_updated": "Yorum güncellendi",
       "comment_deleted": "Yorum silindi",
+      "comment_deleted": "Yorum silindi",
       "reply_updated": "Yanıt güncellendi",
       "reply_deleted": "Yanıt silindi",
-      "no_comments_yet": "Henüz yorum yapmadınız."
+      "no_comments_yet": "Henüz yorum yapmadınız.",
+      "joined_in": "{{date}} tarihinde katıldı"
     }
   },
   en: {
@@ -145,9 +147,11 @@ const resources = {
       "go_to_poem": "Go to Poem →",
       "comment_updated": "Comment updated",
       "comment_deleted": "Comment deleted",
+      "comment_deleted": "Comment deleted",
       "reply_updated": "Reply updated",
       "reply_deleted": "Reply deleted",
-      "no_comments_yet": "You haven't made any comments yet."
+      "no_comments_yet": "You haven't made any comments yet.",
+      "joined_in": "Joined in {{date}}"
     }
   },
   sr: {
@@ -219,9 +223,11 @@ const resources = {
       "go_to_poem": "Idi na pesmu →",
       "comment_updated": "Komentar ažuriran",
       "comment_deleted": "Komentar obrisan",
+      "comment_deleted": "Komentar obrisan",
       "reply_updated": "Odgovor ažuriran",
       "reply_deleted": "Odgovor obrisan",
-      "no_comments_yet": "Još uvek nemate komentara."
+      "no_comments_yet": "Još uvek nemate komentara.",
+      "joined_in": "Pridružio se {{date}}"
     }
   },
   de: {
@@ -293,9 +299,11 @@ const resources = {
       "go_to_poem": "Zum Gedicht →",
       "comment_updated": "Kommentar aktualisiert",
       "comment_deleted": "Kommentar gelöscht",
+      "comment_deleted": "Kommentar gelöscht",
       "reply_updated": "Antwort aktualisiert",
       "reply_deleted": "Antwort gelöscht",
-      "no_comments_yet": "Du hast noch keine Kommentare abgegeben."
+      "no_comments_yet": "Du hast noch keine Kommentare abgegeben.",
+      "joined_in": "Beigetreten im {{date}}"
     }
   }
 };
