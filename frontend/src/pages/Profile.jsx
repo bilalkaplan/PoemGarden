@@ -135,25 +135,27 @@ function Profile() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    
+    const updatedUser = { 
+      ...user, 
+      firstName: editData.firstName, 
+      lastName: editData.lastName,
+      bio: editData.bio,
+      avatar: editData.avatar
+    };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setIsEditing(false);
+
     try {
       await axios.put(`https://poemgarden.onrender.com/api/auth/profile`, editData, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      alert(t('profile_updated') || 'Profile updated!');
-      const updatedUser = { 
-        ...user, 
-        firstName: editData.firstName, 
-        lastName: editData.lastName,
-        bio: editData.bio,
-        avatar: editData.avatar
-      };
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      setIsEditing(false);
     } catch (err) {
       alert(t('profile_update_failed') || 'Profile update failed.');
     }
   };
+
 
   const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
   const MAX_PREVIEW_LENGTH = 150;
@@ -223,7 +225,7 @@ function Profile() {
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarUpload}
-                style={{ fontSize: '0.8rem', color: 'transparent', outline: 'none' }}
+                style={{ fontSize: '0.8rem', color: 'black', outline: 'none' }}
               />
               {editData.avatar && !editData.avatar.includes('<svg') && (
                 <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
