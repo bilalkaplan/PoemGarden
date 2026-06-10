@@ -65,7 +65,15 @@ const resources = {
       "delete_user": "Kullanıcıyı Sil",
       "confirm_delete_user": "Bu kullanıcıyı silmek istediğinize emin misiniz? Tüm şiirleri de silinecek!",
       "user_deleted": "Kullanıcı başarıyla silindi",
-      "user_delete_failed": "Kullanıcı silinirken bir hata oluştu"
+      "user_delete_failed": "Kullanıcı silinirken bir hata oluştu",
+      "my_comments": "Yorumlarım",
+      "edited_tag": "(Düzenlendi)",
+      "go_to_poem": "Şiire Git →",
+      "comment_updated": "Yorum güncellendi",
+      "comment_deleted": "Yorum silindi",
+      "reply_updated": "Yanıt güncellendi",
+      "reply_deleted": "Yanıt silindi",
+      "no_comments_yet": "Henüz yorum yapmadınız."
     }
   },
   en: {
@@ -131,7 +139,15 @@ const resources = {
       "delete_user": "Delete User",
       "confirm_delete_user": "Are you sure you want to delete this user? All their poems will also be deleted!",
       "user_deleted": "User deleted successfully",
-      "user_delete_failed": "Failed to delete user"
+      "user_delete_failed": "Failed to delete user",
+      "my_comments": "My Comments",
+      "edited_tag": "(Edited)",
+      "go_to_poem": "Go to Poem →",
+      "comment_updated": "Comment updated",
+      "comment_deleted": "Comment deleted",
+      "reply_updated": "Reply updated",
+      "reply_deleted": "Reply deleted",
+      "no_comments_yet": "You haven't made any comments yet."
     }
   },
   sr: {
@@ -197,7 +213,15 @@ const resources = {
       "delete_user": "Obriši korisnika",
       "confirm_delete_user": "Da li ste sigurni da želite da obrišete ovog korisnika? Sve njihove pesme će biti obrisane!",
       "user_deleted": "Korisnik uspešno obrisan",
-      "user_delete_failed": "Brisanje korisnika nije uspelo"
+      "user_delete_failed": "Brisanje korisnika nije uspelo",
+      "my_comments": "Moji komentari",
+      "edited_tag": "(Izmenjeno)",
+      "go_to_poem": "Idi na pesmu →",
+      "comment_updated": "Komentar ažuriran",
+      "comment_deleted": "Komentar obrisan",
+      "reply_updated": "Odgovor ažuriran",
+      "reply_deleted": "Odgovor obrisan",
+      "no_comments_yet": "Još uvek nemate komentara."
     }
   },
   de: {
@@ -263,7 +287,15 @@ const resources = {
       "delete_user": "Benutzer löschen",
       "confirm_delete_user": "Möchten Sie diesen Benutzer wirklich löschen? Alle seine Gedichte werden ebenfalls gelöscht!",
       "user_deleted": "Benutzer erfolgreich gelöscht",
-      "user_delete_failed": "Fehler beim Löschen des Benutzers"
+      "user_delete_failed": "Fehler beim Löschen des Benutzers",
+      "my_comments": "Meine Kommentare",
+      "edited_tag": "(Bearbeitet)",
+      "go_to_poem": "Zum Gedicht →",
+      "comment_updated": "Kommentar aktualisiert",
+      "comment_deleted": "Kommentar gelöscht",
+      "reply_updated": "Antwort aktualisiert",
+      "reply_deleted": "Antwort gelöscht",
+      "no_comments_yet": "Du hast noch keine Kommentare abgegeben."
     }
   }
 };

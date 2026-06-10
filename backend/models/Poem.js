@@ -7,6 +7,7 @@ const replySchema = new mongoose.Schema({
         ref: 'User', 
         required: true 
     },
+    edited: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 
@@ -18,6 +19,7 @@ const commentSchema = new mongoose.Schema({
         required: true 
     },
     replies: [replySchema],
+    edited: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 

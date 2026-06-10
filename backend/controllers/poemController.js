@@ -164,3 +164,141 @@ exports.addReply = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.updateComment = async (req, res) => {
+    try {
+        const { text } = req.body;
+        const poem = await Poem.findById(req.params.poemId);
+        if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
+
+        const comment = poem.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: 'Yorum bulunamadı' });
+
+        if (comment.author.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Bu yorumu düzenlemeye yetkiniz yok' });
+        }
+
+        comment.text = text;
+        comment.edited = true;
+        await poem.save();
+        res.json({ message: 'Yorum güncellendi' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteComment = async (req, res) => {
+    try {
+        const poem = await Poem.findById(req.params.poemId);
+        if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
+
+        const comment = poem.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: 'Yorum bulunamadı' });
+
+        if (comment.author.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Bu yorumu silmeye yetkiniz yok' });
+        }
+
+        poem.comments.pull(req.params.commentId);
+        await poem.save();
+        res.json({ message: 'Yorum silindi' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.updateReply = async (req, res) => {
+    try {
+        const { text } = req.body;
+        const poem = await Poem.findById(req.params.poemId);
+        if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
+
+        const comment = poem.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: 'Yorum bulunamadı' });
+
+        const reply = comment.replies.id(req.params.replyId);
+        if (!reply) return res.status(404).json({ message: 'Yanıt bulunamadı' });
+
+        if (reply.author.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Bu yanıtı düzenlemeye yetkiniz yok' });
+        }
+
+        reply.text = text;
+        reply.edited = true;
+        await poem.save();
+        res.json({ message: 'Yanıt güncellendi' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteReply = async (req, res) => {
+    try {
+        const poem = await Poem.findById(req.params.poemId);
+        if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
+
+        const comment = poem.comments.id(req.params.commentId);
+        if (!comment) return res.status(404).json({ message: 'Yorum bulunamadı' });
+
+        const reply = comment.replies.id(req.params.replyId);
+        if (!reply) return res.status(404).json({ message: 'Yanıt bulunamadı' });
+
+        if (reply.author.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Bu yanıtı silmeye yetkiniz yok' });
+        }
+
+        comment.replies.pull(req.params.replyId);
+        await poem.save();
+        res.json({ message: 'Yanıt silindi' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getUserComments = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const poems = await Poem.find({
+            $or: [
+                { 'comments.author': userId },
+                { 'comments.replies.author': userId }
+            ]
+        }).select('title comments').populate('comments.author', 'nickname avatar').populate('comments.replies.author', 'nickname avatar');
+
+        let userComments = [];
+        poems.forEach(poem => {
+            poem.comments.forEach(comment => {
+                if (comment.author._id.toString() === userId) {
+                    userComments.push({
+                        _id: comment._id,
+                        poemId: poem._id,
+                        poemTitle: poem.title,
+                        text: comment.text,
+                        createdAt: comment.createdAt,
+                        type: 'comment',
+                        edited: comment.edited
+                    });
+                }
+                comment.replies.forEach(reply => {
+                    if (reply.author._id.toString() === userId) {
+                        userComments.push({
+                            _id: reply._id,
+                            poemId: poem._id,
+                            poemTitle: poem.title,
+                            parentCommentText: comment.text,
+                            text: reply.text,
+                            createdAt: reply.createdAt,
+                            type: 'reply',
+                            edited: reply.edited
+                        });
+                    }
+                });
+            });
+        });
+
+        userComments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        res.json(userComments);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

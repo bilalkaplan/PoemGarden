@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const COLORS = {
   primary: '#ffffff',
@@ -18,6 +18,7 @@ function Profile() {
   const DEFAULT_AVATAR = "/default-avatar.svg";
   const [user, setUser] = useState(null);
   const [myPoems, setMyPoems] = useState([]);
+  const [myComments, setMyComments] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ firstName: '', lastName: '', bio: '', avatar: '' });
   const [editingPoemId, setEditingPoemId] = useState(null);
@@ -41,11 +42,13 @@ function Profile() {
               avatar: storedUser.avatar || ''
             });
             fetchMyPoems(storedUser._id);
+            fetchMyComments(storedUser._id);
           }
         } else {
           const userRes = await axios.get(`https://poemgarden.onrender.com/api/auth/user/${id}`);
           setUser(userRes.data);
           fetchMyPoems(id);
+          fetchMyComments(id);
         }
       } catch (err) {
         console.error("Profil yüklenemedi:", err);
@@ -60,6 +63,17 @@ function Profile() {
       setMyPoems(res.data.poems || res.data);
     } catch (err) {
       console.error("Şiirler yüklenemedi:", err);
+    }
+  };
+
+  const fetchMyComments = async (userId) => {
+    try {
+      const res = await axios.get(`https://poemgarden.onrender.com/api/poems/user/${userId}/comments`, {
+          headers: { Authorization: `Bearer ${token}` }
+      });
+      setMyComments(res.data);
+    } catch (err) {
+      console.error("Yorumlar yüklenemedi:", err);
     }
   };
 
@@ -300,6 +314,37 @@ function Profile() {
           })
         ) : (
           <p style={{ color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_poems_yet')}</p>
+        )}
+      </div>
+
+      <div style={{ marginTop: '30px' }}>
+        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{t('my_comments') || 'Yorumlarım'}</h2>
+        {myComments.length > 0 ? (
+          myComments.map(comment => (
+            <div key={comment._id} style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '15px', borderLeft: `4px solid ${COLORS.secondary}` }}>
+              {comment.type === 'reply' && comment.parentCommentText && (
+                <div style={{ fontSize: '0.8rem', color: '#ccc', fontStyle: 'italic', marginBottom: '8px', paddingLeft: '8px', borderLeft: '2px solid #555' }}>
+                  "{comment.parentCommentText}"
+                </div>
+              )}
+              <div style={{ fontSize: '0.9rem', color: COLORS.primary, marginBottom: '8px', wordBreak: 'break-word' }}>
+                {comment.text}
+                {comment.edited && <span style={{ fontSize: '0.7rem', color: '#aaa', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.75rem', color: '#ccc' }}>
+                  {new Date(comment.createdAt).toLocaleDateString()}
+                </span>
+                <Link to="/" style={{ textDecoration: 'none' }}>
+                  <button style={{ padding: '4px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}>
+                    {t('go_to_poem')} "{comment.poemTitle}"
+                  </button>
+                </Link>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p style={{ color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_comments_yet') || 'Henüz yorum yapmadınız.'}</p>
         )}
       </div>
     </div>
