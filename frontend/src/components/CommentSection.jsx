@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 const COLORS = {
-  primary: '#2d2d2d',
+  primary: '#ffffff',
   secondary: '#8b7355',
   tertiary: '#6b8e6f',
   accent: '#8b7355'
 };
 
-const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><rect fill="%23919D85" width="24" height="24" rx="4"/><g fill="%23FFFFFF"><circle cx="12" cy="8" r="3"/><path d="M12 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/></g></svg>';
+const DEFAULT_AVATAR = "/default-avatar.svg";
 
 function CommentSection({ poem, user, onUpdate, setToast }) {
   const { t } = useTranslation();
@@ -54,7 +54,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
         {poem.comments && poem.comments.map(comment => (
             <div key={comment._id} style={{ backgroundColor: '#333', padding: '8px 10px', borderRadius: '5px', marginBottom: '6px', borderLeft: `2px solid ${COLORS.accent}` }}>
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '4px' }}>
-                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
                   <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: COLORS.secondary }}>
                     <small style={{ color: COLORS.secondary, fontWeight: 'bold', fontSize: '0.8rem' }}>{comment.author?.nickname}: </small>
                   </Link>
@@ -66,7 +66,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
                     {comment.replies.map(reply => (
                       <div key={reply._id} style={{ marginBottom: '4px' }}>
                         <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginBottom: '2px' }}>
-                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
                           <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: COLORS.tertiary }}>
                             <small style={{ color: COLORS.tertiary, fontWeight: 'bold', fontSize: '0.75rem' }}>{reply.author?.nickname}:</small>
                           </Link>

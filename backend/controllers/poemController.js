@@ -88,7 +88,6 @@ exports.addComment = async (req, res) => {
         const savedPoem = await poem.save();
         const savedComment = savedPoem.comments[savedPoem.comments.length - 1];
         
-        // Şiir sahibine bildirim gönder (eğer yorum sahibi kendisi değilse)
         if (poem.author._id.toString() !== req.user.id) {
             await User.findByIdAndUpdate(poem.author._id, {
                 $push: {
@@ -128,7 +127,6 @@ exports.addReply = async (req, res) => {
         const savedPoem = await poem.save();
         const savedReply = comment.replies[comment.replies.length - 1];
 
-        // Yorum sahibine bildirim gönder (eğer yanıt veren kendisi değilse)
         if (comment.author._id.toString() !== req.user.id) {
             await User.findByIdAndUpdate(comment.author._id, {
                 $push: {
@@ -144,7 +142,6 @@ exports.addReply = async (req, res) => {
             });
         }
 
-        // Şiir sahibine de bildirim gönder (opsiyonel — yalnızca şiir sahibi != yorum sahibi)
         if (poem.author._id.toString() !== req.user.id && poem.author._id.toString() !== comment.author._id.toString()) {
             await User.findByIdAndUpdate(poem.author._id, {
                 $push: {

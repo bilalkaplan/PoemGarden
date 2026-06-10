@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import CommentSection from './CommentSection';
 
 const COLORS = {
-  primary: '#2d2d2d',
+  primary: '#ffffff',
   secondary: '#8b7355',
   tertiary: '#6b8e6f',
   dark: '#919D85',
@@ -13,7 +13,7 @@ const COLORS = {
   accent: '#8b7355'
 };
 
-const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><rect fill="%23919D85" width="24" height="24" rx="4"/><g fill="%23FFFFFF"><circle cx="12" cy="8" r="3"/><path d="M12 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/></g></svg>';
+const DEFAULT_AVATAR = "/default-avatar.svg";
 
 function PoemCard({ poem, user, onUpdate, setToast }) {
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   return (
     <div style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
       <Link to={`/profile/${poem.author?._id}`} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-        <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+        <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
         <div>
           <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
           <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>

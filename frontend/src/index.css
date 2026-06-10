@@ -19,7 +19,7 @@
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: var(--bg);
+  background: #919D85 !important;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -50,16 +50,28 @@
   }
 }
 
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background-color: #919D85 !important;
+  box-sizing: border-box;
+}
+
 body {
-  margin: 0;
+  font-family: var(--sans);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #dddddd !important;
+  opacity: 1 !important;
 }
 
 #root {
-  width: 1126px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;

@@ -23,7 +23,13 @@ function Register() {
   const showPasswordInfo = passwordFocused || formData.password.length > 0;
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    let { name, value } = e.target;
+    
+    // Ad ve soyad alanlarında (tüm dünya dilleri dahil) sadece harf, boşluk ve tireye izin ver
+    if (name === 'firstName' || name === 'lastName') {
+      value = value.replace(/[^\p{L}\s-]/gu, '');
+    }
+
     setFormData({ ...formData, [name]: value });
     if (serverError) setServerError('');
   };

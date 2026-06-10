@@ -25,7 +25,10 @@ function Navbar() {
   return (
     <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', backgroundColor: COLORS.darkBg, borderBottom: `2px solid ${COLORS.secondary}`, alignItems: 'center' }}>
       <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-        <Link to="/" style={{ color: COLORS.primary, textDecoration: 'none', fontWeight: 'bold', fontSize: '1.4rem' }}>🌸 PoemGarden</Link>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: COLORS.primary, textDecoration: 'none', fontWeight: 'bold', fontSize: '1.4rem' }}>
+          <img src="/poemgarden_logo_8.png" alt="Logo" style={{ height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+          PoemGarden
+        </Link>
         
         {!user ? (
           <>
@@ -42,20 +45,25 @@ function Navbar() {
       </div>
       
       <div style={{ display: 'flex', gap: '8px' }}>
-        {['tr', 'en', 'sr', 'de'].map(lang => (
-          <button 
-            key={lang}
-            onClick={() => i18n.changeLanguage(lang)} 
-            style={{ 
-              padding: '6px 12px', cursor: 'pointer', 
-              backgroundColor: i18n.language === lang ? COLORS.secondary : COLORS.dark, 
-              color: i18n.language === lang ? 'white' : '#f0f0f0', 
-              border: `1px solid ${COLORS.secondary}`, borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase' 
-            }}
-          >
-            {lang}
-          </button>
-        ))}
+        {['tr', 'en', 'sr', 'de'].map(lang => {
+          const flagUrls = { tr: 'https://flagcdn.com/w20/tr.png', en: 'https://flagcdn.com/w20/gb.png', sr: 'https://flagcdn.com/w20/rs.png', de: 'https://flagcdn.com/w20/de.png' };
+          return (
+            <button 
+              key={lang}
+              onClick={() => i18n.changeLanguage(lang)} 
+              style={{ 
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '6px 12px', cursor: 'pointer', 
+                backgroundColor: i18n.language === lang ? COLORS.secondary : COLORS.dark, 
+                color: i18n.language === lang ? 'white' : '#f0f0f0', 
+                border: `1px solid ${COLORS.secondary}`, borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase' 
+              }}
+            >
+              <img src={flagUrls[lang]} alt={lang} style={{ width: '16px', borderRadius: '2px' }} />
+              {lang}
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

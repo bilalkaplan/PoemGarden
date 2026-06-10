@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 const COLORS = {
-  primary: '#2d2d2d',
+  primary: '#ffffff',
   secondary: '#8b7355', 
   tertiary: '#6b8e6f',
   dark: '#919D85',
@@ -15,7 +15,7 @@ const COLORS = {
 function Profile() {
   const { t } = useTranslation();
   const { id } = useParams();
-  const DEFAULT_AVATAR = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><rect fill="%23919D85" width="24" height="24" rx="4"/><g fill="%23FFFFFF"><circle cx="12" cy="8" r="3"/><path d="M12 13c-4 0-6 2-6 4v1h12v-1c0-2-2-4-6-4z"/></g></svg>';
+  const DEFAULT_AVATAR = "/default-avatar.svg";
   const [user, setUser] = useState(null);
   const [myPoems, setMyPoems] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -141,7 +141,7 @@ function Profile() {
 
       <div style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '25px', borderLeft: `4px solid ${COLORS.secondary}` }}>
         <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start', marginBottom: '15px' }}>
-          <img src={user.avatar || DEFAULT_AVATAR} alt="Avatar" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
+          <img src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
           <div>
             <h2 style={{ fontSize: '1.3rem', color: COLORS.primary, margin: 0 }}>{user.nickname}</h2>
             <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}>{user.bio}</p>
@@ -183,15 +183,15 @@ function Profile() {
               style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', height: '60px', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto' }}
             />
             <div style={{ padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
-              <label style={{ fontSize: '0.85rem', color: COLORS.primary, display: 'block', marginBottom: '8px' }}>{t('profile_photo')}</label>
+              <label style={{ fontSize: '0.85rem', color: COLORS.primary, display: 'block', marginBottom: '8px' }}>{t('profile_photo') || 'Profil Fotoğrafı (Zorunlu Değil)'}</label>
               <input 
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarUpload}
-                style={{ fontSize: '0.8rem', color: COLORS.primary }}
+                style={{ fontSize: '0.8rem', color: 'transparent', outline: 'none' }}
               />
-              {editData.avatar && (
-                <img src={editData.avatar} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
+              {editData.avatar && !editData.avatar.includes('<svg') && (
+                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
               )}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>

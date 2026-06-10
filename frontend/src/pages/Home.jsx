@@ -6,7 +6,7 @@ import PoemCard from '../components/PoemCard';
 import Toast from '../components/Toast';
 
 const COLORS = {
-  primary: '#2d2d2d',
+  primary: '#ffffff',
   secondary: '#8b7355',
   tertiary: '#6b8e6f',
   dark: '#919D85',
@@ -19,6 +19,7 @@ function Home() {
   const [poems, setPoems] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [toastConfig, setToastConfig] = useState({ message: '', type: 'info' });
   
   const user = JSON.parse(localStorage.getItem('user'));
@@ -31,6 +32,8 @@ function Home() {
       setPage(res.data.currentPage || p);
     } catch (err) {
       console.error("Şiirler yüklenemedi:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +54,9 @@ function Home() {
       )}
 
       <div>
-        {poems && poems.length > 0 ? poems.map(poem => (
+        {loading ? (
+          <p style={{ textAlign: 'center', color: COLORS.primary, fontSize: '1rem', padding: '20px' }}>Şiirler yükleniyor...</p>
+        ) : poems && poems.length > 0 ? poems.map(poem => (
           <PoemCard 
             key={poem._id} 
             poem={poem} 
@@ -65,11 +70,11 @@ function Home() {
 
         {totalPages > 1 && (
           <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '12px' }}>
-            <button onClick={() => fetchPoems(Math.max(1, page-1))} disabled={page===1} style={{ padding: '6px 10px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: COLORS.dark, color: '#fff' }}>{t('prev') || 'Prev'}</button>
+            <button onClick={() => fetchPoems(Math.max(1, page-1))} disabled={page===1} style={{ padding: '6px 10px', borderRadius: '4px', border: 'none', backgroundColor: COLORS.darkBg, color: '#ffffff', cursor: page===1 ? 'not-allowed' : 'pointer', opacity: page===1 ? 0.5 : 1 }}>{t('prev') || 'Prev'}</button>
             {Array.from({ length: totalPages }).map((_, idx) => (
-              <button key={idx} onClick={() => fetchPoems(idx+1)} style={{ padding: '6px 10px', borderRadius: '4px', border: `1px solid ${COLORS.secondary}`, backgroundColor: page===idx+1 ? COLORS.secondary : COLORS.dark, color: '#fff' }}>{idx+1}</button>
+              <button key={idx} onClick={() => fetchPoems(idx+1)} style={{ padding: '6px 10px', borderRadius: '4px', border: `1px solid ${page===idx+1 ? COLORS.secondary : 'transparent'}`, backgroundColor: page===idx+1 ? COLORS.secondary : COLORS.darkBg, color: '#ffffff', cursor: 'pointer', fontWeight: page===idx+1 ? 'bold' : 'normal' }}>{idx+1}</button>
             ))}
-            <button onClick={() => fetchPoems(Math.min(totalPages, page+1))} disabled={page===totalPages} style={{ padding: '6px 10px', borderRadius: '4px', border: '1px solid #ccc', backgroundColor: COLORS.dark, color: '#fff' }}>{t('next') || 'Next'}</button>
+            <button onClick={() => fetchPoems(Math.min(totalPages, page+1))} disabled={page===totalPages} style={{ padding: '6px 10px', borderRadius: '4px', border: 'none', backgroundColor: COLORS.darkBg, color: '#ffffff', cursor: page===totalPages ? 'not-allowed' : 'pointer', opacity: page===totalPages ? 0.5 : 1 }}>{t('next') || 'Next'}</button>
           </div>
         )}
       </div>
