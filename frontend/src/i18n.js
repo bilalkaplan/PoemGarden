@@ -75,7 +75,9 @@ const resources = {
       "reply_updated": "Yanıt güncellendi",
       "reply_deleted": "Yanıt silindi",
       "no_comments_yet": "Henüz yorum yapmadınız.",
-      "joined_in": "{{date}} tarihinde katıldı"
+      "joined_in": "{{date}} tarihinde katıldı",
+      "copy_link": "Bağlantıyı Kopyala",
+      "link_copied": "Bağlantı kopyalandı!"
     }
   },
   en: {
@@ -151,7 +153,9 @@ const resources = {
       "reply_updated": "Reply updated",
       "reply_deleted": "Reply deleted",
       "no_comments_yet": "You haven't made any comments yet.",
-      "joined_in": "Joined in {{date}}"
+      "joined_in": "Joined in {{date}}",
+      "copy_link": "Copy Link",
+      "link_copied": "Link copied!"
     }
   },
   sr: {
@@ -227,7 +231,9 @@ const resources = {
       "reply_updated": "Odgovor ažuriran",
       "reply_deleted": "Odgovor obrisan",
       "no_comments_yet": "Još uvek nemate komentara.",
-      "joined_in": "Pridružio se {{date}}"
+      "joined_in": "Pridružio se {{date}}",
+      "copy_link": "Kopiraj vezu",
+      "link_copied": "Veza kopirana!"
     }
   },
   de: {
@@ -303,7 +309,9 @@ const resources = {
       "reply_updated": "Antwort aktualisiert",
       "reply_deleted": "Antwort gelöscht",
       "no_comments_yet": "Du hast noch keine Kommentare abgegeben.",
-      "joined_in": "Beigetreten im {{date}}"
+      "joined_in": "Beigetreten im {{date}}",
+      "copy_link": "Link kopieren",
+      "link_copied": "Link kopiert!"
     }
   }
 };

@@ -24,6 +24,8 @@ function Profile() {
   const [editingPoemId, setEditingPoemId] = useState(null);
   const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
   const [expandedPoem, setExpandedPoem] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [toast, setToast] = useState(null);
   const token = localStorage.getItem('token');
   const storedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -284,7 +286,28 @@ function Profile() {
                   </form>
                 ) : (
                   <>
-                    <h3 style={{ margin: '0 0 6px 0', color: COLORS.primary, fontSize: '1.05rem' }}>{poem.title}</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                      <h3 style={{ margin: '0 0 6px 0', color: COLORS.primary, fontSize: '1.05rem' }}>{poem.title}</h3>
+                      <div style={{ position: 'relative' }}>
+                        <button onClick={() => setOpenMenuId(openMenuId === poem._id ? null : poem._id)} style={{ background: 'none', border: 'none', color: COLORS.primary, fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>⋮</button>
+                        {openMenuId === poem._id && (
+                          <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: COLORS.dark, borderRadius: '4px', padding: '5px 0', zIndex: 10, boxShadow: '0 2px 5px rgba(0,0,0,0.2)', minWidth: '150px' }}>
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(window.location.origin + '/?open=' + poem._id);
+                                setToast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
+                                setOpenMenuId(null);
+                              }}
+                              style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', color: 'white', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem' }}
+                              onMouseEnter={(e) => e.target.style.backgroundColor = COLORS.darkBg}
+                              onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                            >
+                              🔗 {t('copy_link') || 'Bağlantıyı Kopyala'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                     <p style={{ fontSize: '0.9rem', color: COLORS.primary, fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '6px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '80px', overflow: 'hidden' }}>
                       {displayContent}
                       {shouldTruncate && !isExpanded && '...'}

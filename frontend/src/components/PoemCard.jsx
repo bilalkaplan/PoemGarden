@@ -18,6 +18,7 @@ const DEFAULT_AVATAR = "/default-avatar.svg";
 function PoemCard({ poem, user, onUpdate, setToast }) {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const [editingPoemId, setEditingPoemId] = useState(null);
   const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
   const token = localStorage.getItem('token');
@@ -56,13 +57,34 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
 
   return (
     <div style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
-      <Link to={`/profile/${poem.author?._id}`} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-        <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
-        <div>
-          <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
-          <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Link to={`/profile/${poem.author?._id}`} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+          <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+          <div>
+            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
+            <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>
+          </div>
+        </Link>
+        <div style={{ position: 'relative' }}>
+          <button onClick={() => setShowMenu(!showMenu)} style={{ background: 'none', border: 'none', color: COLORS.primary, fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>⋮</button>
+          {showMenu && (
+            <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: COLORS.dark, borderRadius: '4px', padding: '5px 0', zIndex: 10, boxShadow: '0 2px 5px rgba(0,0,0,0.2)', minWidth: '150px' }}>
+              <button 
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.origin + '/?open=' + poem._id);
+                  if (setToast) setToast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
+                  setShowMenu(false);
+                }}
+                style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', color: 'white', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = COLORS.darkBg}
+                onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+              >
+                🔗 {t('copy_link') || 'Bağlantıyı Kopyala'}
+              </button>
+            </div>
+          )}
         </div>
-      </Link>
+      </div>
 
       {editingPoemId === poem._id ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
