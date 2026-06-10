@@ -14,6 +14,11 @@ const register = async (req, res) => {
         if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
             return res.status(400).json({ message: 'Ad ve soyad sadece harflerden oluşmalıdır.' });
         }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Lütfen geçerli bir e-posta adresi girin.' });
+        }
         
         let cleanNickname = nickname.trim();
         if (!cleanNickname.startsWith('@')) {

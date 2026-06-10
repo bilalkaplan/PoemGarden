@@ -79,7 +79,7 @@ function Register() {
         </div>
         <input 
           name="email" 
-          type="text" 
+          type="email" 
           placeholder={t('email')} 
           onChange={handleChange} 
           required 
