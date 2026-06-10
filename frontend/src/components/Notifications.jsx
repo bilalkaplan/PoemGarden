@@ -16,7 +16,7 @@ function Notifications() {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:5000/api/auth/notifications', {
+        const res = await axios.get('https://poemgarden.onrender.com/api/auth/notifications', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setNotifications(res.data || []);
@@ -32,7 +32,7 @@ function Notifications() {
 
   const handleMarkRead = async (notifId, poemId) => {
     try {
-      await axios.put(`http://127.0.0.1:5000/api/auth/notifications/${notifId}/read`, {}, {
+      await axios.put(`https://poemgarden.onrender.com/api/auth/notifications/${notifId}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications(notifications.map(n => n._id === notifId ? { ...n, read: true } : n));

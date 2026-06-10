@@ -43,7 +43,7 @@ function Profile() {
             fetchMyPoems(storedUser._id);
           }
         } else {
-          const userRes = await axios.get(`http://127.0.0.1:5000/api/auth/user/${id}`);
+          const userRes = await axios.get(`https://poemgarden.onrender.com/api/auth/user/${id}`);
           setUser(userRes.data);
           fetchMyPoems(id);
         }
@@ -56,7 +56,7 @@ function Profile() {
 
   const fetchMyPoems = async (userId) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:5000/api/poems?author=${userId}`);
+      const res = await axios.get(`https://poemgarden.onrender.com/api/poems?author=${userId}`);
       setMyPoems(res.data.poems || res.data);
     } catch (err) {
       console.error("Şiirler yüklenemedi:", err);
@@ -77,7 +77,7 @@ function Profile() {
   const handleDeletePoem = async (poemId) => {
     if (!window.confirm(t('confirm_delete') || 'Are you sure?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/poems/${poemId}`, {
+      await axios.delete(`https://poemgarden.onrender.com/api/poems/${poemId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchMyPoems(storedUser._id);
@@ -95,7 +95,7 @@ function Profile() {
   const handleUpdatePoem = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:5000/api/poems/${editingPoemId}`, editPoemData, {
+      await axios.put(`https://poemgarden.onrender.com/api/poems/${editingPoemId}`, editPoemData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert(t('poem_updated') || 'Poem updated');
@@ -109,7 +109,7 @@ function Profile() {
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://127.0.0.1:5000/api/auth/profile`, editData, {
+      await axios.put(`https://poemgarden.onrender.com/api/auth/profile`, editData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert(t('profile_updated') || 'Profile updated!');

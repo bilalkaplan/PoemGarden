@@ -22,7 +22,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
   const handleAddComment = async () => {
     if (!commentInput || commentInput.trim() === '') return;
     try {
-        await axios.post(`http://127.0.0.1:5000/api/poems/${poem._id}/comments`, { text: commentInput }, {
+        await axios.post(`https://poemgarden.onrender.com/api/poems/${poem._id}/comments`, { text: commentInput }, {
             headers: { Authorization: `Bearer ${token}` }
         });
         setCommentInput('');
@@ -37,7 +37,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
     if (!text || text.trim() === '') return;
 
     try {
-        await axios.post(`http://127.0.0.1:5000/api/poems/${poem._id}/comments/${commentId}/replies`, { text }, {
+        await axios.post(`https://poemgarden.onrender.com/api/poems/${poem._id}/comments/${commentId}/replies`, { text }, {
             headers: { Authorization: `Bearer ${token}` }
         });
         setReplyInputs({ ...replyInputs, [commentId]: '' });

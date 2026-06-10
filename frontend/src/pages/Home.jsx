@@ -26,7 +26,7 @@ function Home() {
 
   const fetchPoems = async (p = page) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:5000/api/poems?page=${p}&limit=10`);
+      const res = await axios.get(`https://poemgarden.onrender.com/api/poems?page=${p}&limit=10`);
       setPoems(res.data.poems || res.data);
       setTotalPages(res.data.totalPages || 1);
       setPage(res.data.currentPage || p);

@@ -31,7 +31,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
 
   const handleUpdatePoem = async () => {
     try {
-      await axios.put(`http://127.0.0.1:5000/api/poems/${poem._id}`, editPoemData, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.put(`https://poemgarden.onrender.com/api/poems/${poem._id}`, editPoemData, { headers: { Authorization: `Bearer ${token}` } });
       setEditingPoemId(null);
       if (onUpdate) onUpdate();
       if (setToast) setToast({ message: t('poem_updated') || 'Şiir güncellendi', type: 'success' });
@@ -43,7 +43,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   const handleDeletePoem = async () => {
     if (!window.confirm(t('confirm_delete') || 'Emin misiniz?')) return;
     try {
-      await axios.delete(`http://127.0.0.1:5000/api/poems/${poem._id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.delete(`https://poemgarden.onrender.com/api/poems/${poem._id}`, { headers: { Authorization: `Bearer ${token}` } });
       if (onUpdate) onUpdate();
       if (setToast) setToast({ message: t('poem_deleted') || 'Şiir silindi', type: 'success' });
     } catch (err) {

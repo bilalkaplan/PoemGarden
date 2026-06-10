@@ -41,7 +41,7 @@ function Register() {
       return;
     }
     try {
-      await axios.post('http://127.0.0.1:5000/api/auth/register', formData);
+      await axios.post('https://poemgarden.onrender.com/api/auth/register', formData);
       alert(t('register_success') || 'Registration successful!');
       navigate('/login');
     } catch (error) {
