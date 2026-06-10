@@ -57,7 +57,8 @@ const resources = {
       "login_to_comment": "Yorum yapmak için giriş yapın.",
       "poet": "Şair",
       "read_more": "Devamını Oku →",
-      "collapse": "← Daralt"
+      "collapse": "← Daralt",
+      "all_rights_reserved": "Tüm Hakları Saklıdır."
     }
   },
   en: {
@@ -115,7 +116,8 @@ const resources = {
       "login_to_comment": "Please login to comment.",
       "poet": "Poet",
       "read_more": "Read More →",
-      "collapse": "← Collapse"
+      "collapse": "← Collapse",
+      "all_rights_reserved": "All Rights Reserved."
     }
   },
   sr: {
@@ -173,7 +175,8 @@ const resources = {
       "login_to_comment": "Prijavite se za komentar.",
       "poet": "Pesnik",
       "read_more": "Čitaj više →",
-      "collapse": "← Sažmi"
+      "collapse": "← Sažmi",
+      "all_rights_reserved": "Sva prava zadržana."
     }
   },
   de: {
@@ -231,7 +234,8 @@ const resources = {
       "login_to_comment": "Bitte melden Sie sich an, um zu kommentieren.",
       "poet": "Dichter",
       "read_more": "Mehr lesen →",
-      "collapse": "← Einklappen"
+      "collapse": "← Einklappen",
+      "all_rights_reserved": "Alle Rechte vorbehalten."
     }
   }
 };
