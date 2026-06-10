@@ -1,6 +1,6 @@
-# PoemGarden 🌿
+# PoemGarden
 
-🚀 **Canlı Demo (Live):** [https://poem-garden.vercel.app](https://poem-garden.vercel.app)
+**Canlı Demo (Live):** [https://poem-garden.vercel.app](https://poem-garden.vercel.app)
 
 Bu proje, Web Geliştirme dersi dönemi projesi kapsamında geliştirilmiş bir MERN Stack (MongoDB, Express.js, React, Node.js) web uygulamasıdır. Kullanıcıların kayıt olup giriş yapabileceği, kendi şiirlerini paylaşıp diğer kullanıcıların şiirlerine yorum yapabileceği tam kapsamlı bir platformdur. Veritabanı ve sunucu kısımları buluta taşınmış olup, uygulama herkesin erişebileceği şekilde Vercel ve Render üzerinden **canlıya (deploy)** alınmıştır.
 
