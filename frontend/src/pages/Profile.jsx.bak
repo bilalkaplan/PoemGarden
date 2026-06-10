@@ -1,0 +1,356 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+
+const COLORS = {
+  primary: '#EBE1C6',
+  secondary: '#C496A1', 
+  tertiary: '#919D85',
+  dark: '#1a1a1a',
+  darkBg: '#2a2a2a',
+  accent: '#C496A1'
+};
+
+function Profile() {
+  const { t } = useTranslation();
+  const [user, setUser] = useState(null);
+  const [myPoems, setMyPoems] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ firstName: '', lastName: '', bio: '', avatar: '' });
+  const [editingPoemId, setEditingPoemId] = useState(null);
+  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
+  const [expandedPoem, setExpandedPoem] = useState(null);
+  const token = localStorage.getItem('token');
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+
+  useEffect(() => {
+    if (storedUser) {
+      setUser(storedUser);
+      setEditData({ 
+        firstName: storedUser.firstName, 
+        lastName: storedUser.lastName,
+        bio: storedUser.bio || 'Edebiyat aşığı.',
+        avatar: storedUser.avatar || ''
+      });
+      fetchMyPoems();
+    }
+  }, []);
+
+  const fetchMyPoems = async () => {
+    try {
+      const res = await axios.get('http://127.0.0.1:5000/api/poems');
+      const filtered = res.data.filter(poem => poem.author._id === storedUser._id);
+      setMyPoems(filtered);
+    } catch (err) {
+      console.error("Şiirler yüklenemedi:", err);
+    }
+  };
+
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditData({ ...editData, avatar: reader.result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDeletePoem = async (poemId) => {
+    if (!window.confirm('Bu şiiri silmek istediğinize emin misiniz?')) return;
+    try {
+      await axios.delete(`http://127.0.0.1:5000/api/poems/${poemId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchMyPoems();
+      alert('Şiir silindi.');
+    } catch (err) {
+      alert('Şiir silinirken hata oluştu.');
+    }
+  };
+
+  const handleEditPoem = (poem) => {
+    setEditingPoemId(poem._id);
+    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Arial' });
+  };
+
+  const handleUpdatePoem = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://127.0.0.1:5000/api/poems/${editingPoemId}`, editPoemData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert('Şiir güncellendi!');
+      setEditingPoemId(null);
+      fetchMyPoems();
+    } catch (err) {
+      alert('Şiir güncellemesi başarısız.');
+    }
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://127.0.0.1:5000/api/auth/profile`, editData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert('Profil güncellendi!');
+      const updatedUser = { 
+        ...user, 
+        firstName: editData.firstName, 
+        lastName: editData.lastName,
+        bio: editData.bio,
+        avatar: editData.avatar
+      };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      setIsEditing(false);
+    } catch (err) {
+      alert('Profil güncellemesi başarısız.');
+    }
+  };
+
+  const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
+  const MAX_PREVIEW_LENGTH = 150;
+
+  if (!user) {
+    return <div style={{ textAlign: 'center', color: '#888', padding: '20px', fontSize: '0.9rem', backgroundColor: COLORS.dark, minHeight: '100vh' }}>Profili görmek için giriş yapmalısınız.</div>;
+  }
+
+  return (
+    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px 10px', color: COLORS.primary, backgroundColor: COLORS.dark, minHeight: '100vh' }}>
+      <h1 style={{ color: COLORS.primary, marginBottom: '20px', fontSize: '1.8rem' }}>Profil</h1>
+
+      {/* Kullanıcı Bilgileri */}
+      <div style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '25px', borderLeft: `4px solid ${COLORS.secondary}` }}>
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start', marginBottom: '15px' }}>
+          {user.avatar && (
+            <img src={user.avatar} alt="Avatar" style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
+          )}
+          <div>
+            <h2 style={{ fontSize: '1.3rem', color: COLORS.primary, margin: 0 }}>{user.nickname}</h2>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.tertiary }}>{user.bio}</p>
+          </div>
+        </div>
+
+        {!isEditing ? (
+          <>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0' }}><strong>Ad:</strong> {user.firstName}</p>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0' }}><strong>Soyad:</strong> {user.lastName}</p>
+            <p style={{ fontSize: '0.9rem', margin: '5px 0' }}><strong>E-posta:</strong> {user.email}</p>
+            <button 
+              onClick={() => setIsEditing(true)} 
+              style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
+            >
+              Profili Düzenle
+            </button>
+          </>
+        ) : (
+          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <input 
+              value={editData.firstName} 
+              onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
+              placeholder="Ad"
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+            />
+            <input 
+              value={editData.lastName} 
+              onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
+              placeholder="Soyad"
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+            />
+            <textarea 
+              value={editData.bio} 
+              onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
+              placeholder="Biyografi"
+              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', height: '60px', backgroundColor: '#444', color: COLORS.primary }}
+            />
+            <div style={{ padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
+              <label style={{ fontSize: '0.85rem', color: COLORS.tertiary, display: 'block', marginBottom: '8px' }}>Profil Fotoğrafı:</label>
+              <input 
+                type="file"
+                accept="image/*"
+                onChange={handleAvatarUpload}
+                style={{ fontSize: '0.8rem', color: COLORS.tertiary }}
+              />
+              {editData.avatar && (
+                <img src={editData.avatar} alt="Preview" style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
+              )}
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>Kaydet</button>
+              <button type="button" onClick={() => setIsEditing(false)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>İptal</button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      {/* Kullanıcının Şiirleri */}
+      <div>
+        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>Benim Şiirlerim</h2>
+        {myPoems.length > 0 ? (
+          myPoems.map(poem => {
+            const isExpanded = expandedPoem === poem._id;
+            const shouldTruncate = poem.content.length > MAX_PREVIEW_LENGTH;
+            const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
+            
+            return (
+              <div key={poem._id} style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
+                {editingPoemId === poem._id ? (
+                  <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input 
+                      value={editPoemData.title} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
+                      placeholder="Başlık"
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
+                    />
+                    <textarea 
+                      value={editPoemData.content} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
+                      placeholder="İçerik"
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
+                    />
+                    <select 
+                      value={editPoemData.font} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
+                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
+                    >
+                      {fonts.map(font => (
+                        <option key={font} value={font}>{font}</option>
+                      ))}
+                    </select>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>Kaydet</button>
+                      <button type="button" onClick={() => setEditingPoemId(null)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>İptal</button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <h3 style={{ margin: '0 0 6px 0', color: COLORS.primary, fontSize: '1.05rem' }}>{poem.title}</h3>
+                    <p style={{ fontSize: '0.9rem', color: COLORS.tertiary, fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '6px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '80px', overflow: 'hidden' }}>
+                      {displayContent}
+                      {shouldTruncate && !isExpanded && '...'}
+                    </p>
+                    {shouldTruncate && (
+                      <button 
+                        onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
+                        style={{ backgroundColor: 'transparent', color: COLORS.secondary, border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
+                      >
+                        {isExpanded ? '← Daralt' : 'Devamını Oku →'}
+                      </button>
+                    )}
+                    <small style={{ color: COLORS.tertiary, fontSize: '0.8rem' }}>Tarih: {new Date(poem.createdAt).toLocaleDateString('tr-TR')}</small>
+                    <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => handleEditPoem(poem)}
+                        style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                      >
+                        Düzenle
+                      </button>
+                      <button 
+                        onClick={() => handleDeletePoem(poem._id)}
+                        style={{ padding: '6px 12px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+                      >
+                        Sil
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <p style={{ color: COLORS.tertiary, fontSize: '0.9rem' }}>Henüz şiir eklememiş.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Profile;
+
+      {/* Kullanıcının Şiirleri */}
+      <div>
+        <h2 style={{ color: '#fff', marginBottom: '15px', fontSize: '1.3rem' }}>Benim Şiirlerim</h2>
+        {myPoems.length > 0 ? (
+          myPoems.map(poem => {
+            const isExpanded = expandedPoem === poem._id;
+            const shouldTruncate = poem.content.length > MAX_PREVIEW_LENGTH;
+            const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
+            
+            return (
+              <div key={poem._id} style={{ backgroundColor: '#1e1e1e', padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: '3px solid #4CAF50' }}>
+                {editingPoemId === poem._id ? (
+                  <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <input 
+                      value={editPoemData.title} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
+                      placeholder="Başlık"
+                      style={{ padding: '6px 8px', borderRadius: '5px', border: 'none', fontSize: '0.9rem' }}
+                    />
+                    <textarea 
+                      value={editPoemData.content} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
+                      placeholder="İçerik"
+                      style={{ padding: '6px 8px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem' }}
+                    />
+                    <select 
+                      value={editPoemData.font} 
+                      onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
+                      style={{ padding: '6px 8px', borderRadius: '5px', border: 'none', fontSize: '0.85rem' }}
+                    >
+                      {fonts.map(font => (
+                        <option key={font} value={font}>{font}</option>
+                      ))}
+                    </select>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button type="submit" style={{ flex: 1, padding: '6px 8px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>Kaydet</button>
+                      <button type="button" onClick={() => setEditingPoemId(null)} style={{ flex: 1, padding: '6px 8px', backgroundColor: '#666', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>İptal</button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <h3 style={{ margin: '0 0 6px 0', color: '#fff', fontSize: '1.05rem' }}>{poem.title}</h3>
+                    <p style={{ fontSize: '0.9rem', color: '#ccc', fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '6px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '80px', overflow: 'hidden' }}>
+                      {displayContent}
+                      {shouldTruncate && !isExpanded && '...'}
+                    </p>
+                    {shouldTruncate && (
+                      <button 
+                        onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
+                        style={{ backgroundColor: 'transparent', color: '#4CAF50', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
+                      >
+                        {isExpanded ? '← Daralt' : 'Devamını Oku →'}
+                      </button>
+                    )}
+                    <small style={{ color: '#888', fontSize: '0.8rem' }}>Tarih: {new Date(poem.createdAt).toLocaleDateString('tr-TR')}</small>
+                    <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                      <button 
+                        onClick={() => handleEditPoem(poem)}
+                        style={{ padding: '5px 10px', backgroundColor: '#2196F3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+                      >
+                        Düzenle
+                      </button>
+                      <button 
+                        onClick={() => handleDeletePoem(poem._id)}
+                        style={{ padding: '5px 10px', backgroundColor: '#ff4d4d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+                      >
+                        Sil
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })
+        ) : (
+          <p style={{ color: '#666', fontSize: '0.9rem' }}>Henüz şiir eklememiş.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Profile;
+
