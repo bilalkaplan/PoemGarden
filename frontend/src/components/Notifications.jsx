@@ -102,7 +102,7 @@ function Notifications() {
           }}
         >
           {notifications.length === 0 ? (
-            <div style={{ padding: '12px', color: COLORS.primary, fontSize: '0.85rem' }}>
+            <div style={{ padding: '12px', color: '#E6E6FA', fontSize: '0.85rem' }}>
               Bildirim yok
             </div>
           ) : (
@@ -124,13 +124,13 @@ function Notifications() {
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = notif.read ? COLORS.dark : '#5a5245'}
               >
                 <div style={{ flex: 1 }}>
-                  <small style={{ color: COLORS.secondary, fontWeight: 'bold', fontSize: '0.8rem' }}>
+                  <small style={{ color: '#E6E6FA', fontWeight: 'bold', fontSize: '0.85rem' }}>
                     {notif.from?.nickname}
                   </small>
-                  <div style={{ color: COLORS.primary, fontSize: '0.8rem', marginTop: '2px' }}>
+                  <div style={{ color: '#E6E6FA', fontSize: '0.85rem', marginTop: '2px' }}>
                     {notif.message}
                   </div>
-                  <div style={{ color: COLORS.primary, fontSize: '0.75rem', marginTop: '2px', fontStyle: 'italic' }}>
+                  <div style={{ color: '#D8BFD8', fontSize: '0.8rem', marginTop: '2px', fontStyle: 'italic' }}>
                     "{notif.poem?.title}"
                   </div>
                 </div>
@@ -140,7 +140,7 @@ function Notifications() {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      backgroundColor: COLORS.secondary,
+                      backgroundColor: '#E6E6FA',
                       marginLeft: '8px'
                     }}
                   />
