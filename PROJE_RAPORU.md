@@ -16,9 +16,9 @@ Projede **Rol Tabanlı Erişim (Role-Based Access Control - RBAC)** kullanılmı
 * **Versiyon Kontrol ve Dağıtım:** Git, GitHub, Vercel (Frontend), Render (Backend).
 
 ### 3. TEMEL ÖZELLİKLER (FEATURES)
-* **Kullanıcı İşlemleri:** Kayıt olma (Register), Giriş yapma (Login), JWT tabanlı kimlik doğrulama, Profil resmi ve biyografi güncelleme.
-* **Şiir Yönetimi:** Şiir ekleme, dinamik yazı tipi (font) seçme, şiiri düzenleme ve silme.
-* **Etkileşim ve Sosyal Ağ:** Şiirlere yorum yapma, yorumlara yanıt (reply) verme, kendi yorumlarını düzenleme ve silme (İyimser/Optimistic UI güncellemeleri ile anında tepki süresi).
+* **Kullanıcı İşlemleri:** Kayıt olma (Register), Giriş yapma (Login), JWT tabanlı kimlik doğrulama, Profil resmi, biyografi güncelleme ve çoklu dil destekli platforma kayıt tarihi (Joined in) gösterimi.
+* **Şiir Yönetimi:** Şiir ekleme, dinamik yazı tipi (font) seçme, şiiri düzenleme ve silme. Uzun şiirler için dinamik "Devamını Oku" metin yönetimi.
+* **Etkileşim ve Sosyal Ağ:** Şiirlere yorum yapma, yorumlara yanıt (reply) verme, kendi yorumlarını düzenleme ve silme (İyimser/Optimistic UI güncellemeleri ile anında tepki süresi). Okunabilirlik odaklı, renk kodlu anlık bildirim sistemi.
 * **Admin Yetkileri:** Yöneticilerin sistemdeki herhangi bir kullanıcıyı, şiiri veya yorumu silebilmesi. İlişkisel veri silme (Kullanıcı silindiğinde ona ait tüm şiirlerin ve yorumların otomatik temizlenmesi - Cascading Delete).
 
 ---
