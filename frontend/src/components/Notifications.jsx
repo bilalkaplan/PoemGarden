@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = {
   secondary: '#8b7355',
@@ -9,6 +10,7 @@ const COLORS = {
 };
 
 function Notifications() {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const token = localStorage.getItem('token');
@@ -103,7 +105,7 @@ function Notifications() {
         >
           {notifications.length === 0 ? (
             <div style={{ padding: '12px', color: '#E6E6FA', fontSize: '0.85rem' }}>
-              Bildirim yok
+              {t('no_notifications')}
             </div>
           ) : (
             notifications.map(notif => (

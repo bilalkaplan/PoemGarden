@@ -16,6 +16,13 @@ Bu proje, Web Geliştirme dersi dönemi projesi kapsamında geliştirilmiş bir 
 - MongoDB & Mongoose
 - JSON Web Token (JWT) ve bcryptjs (Kimlik doğrulama işlemleri için)
 
+## Öne Çıkan Özellikler
+- **Çoklu Dil Desteği (i18n):** TR, EN, SR, DE dillerinde tam senkronizasyon.
+- **Rol Tabanlı Erişim:** Admin ve Şair (Poet) rolleri ile genişletilmiş yönetim.
+- **Gerçek Zamanlı Bildirimler:** Yorum ve yanıtlarda renk kodlu bildirim sistemi.
+- **Sosyal Paylaşım:** Şiir linklerini tek tıkla panoya kopyalama ve paylaşma.
+- **Optimistic UI:** Yorum silme/düzenleme işlemlerinde anında tepki süresi.
+
 ## Kurulum Adımları
 
 Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
