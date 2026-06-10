@@ -94,9 +94,11 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
         </button>
       )}
 
-      {user && poem.author?._id === user._id && (
+      {user && (poem.author?._id === user._id || user.role === 'admin') && (
         <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-          <button onClick={handleEditPoem} style={{ padding: '6px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('edit')}</button>
+          {poem.author?._id === user._id && (
+            <button onClick={handleEditPoem} style={{ padding: '6px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('edit')}</button>
+          )}
           <button onClick={handleDeletePoem} style={{ padding: '6px 10px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('delete')}</button>
         </div>
       )}

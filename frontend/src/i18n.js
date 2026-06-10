@@ -58,7 +58,14 @@ const resources = {
       "poet": "Şair",
       "read_more": "Devamını Oku →",
       "collapse": "← Daralt",
-      "all_rights_reserved": "Tüm Hakları Saklıdır."
+      "all_rights_reserved": "Tüm Hakları Saklıdır.",
+      "loading": "Yükleniyor...",
+      "loading_poems": "Şiirler yükleniyor...",
+      "user_poems_title": "{{nickname}} - Şiirleri",
+      "delete_user": "Kullanıcıyı Sil",
+      "confirm_delete_user": "Bu kullanıcıyı silmek istediğinize emin misiniz? Tüm şiirleri de silinecek!",
+      "user_deleted": "Kullanıcı başarıyla silindi",
+      "user_delete_failed": "Kullanıcı silinirken bir hata oluştu"
     }
   },
   en: {
@@ -117,7 +124,14 @@ const resources = {
       "poet": "Poet",
       "read_more": "Read More →",
       "collapse": "← Collapse",
-      "all_rights_reserved": "All Rights Reserved."
+      "all_rights_reserved": "All Rights Reserved.",
+      "loading": "Loading...",
+      "loading_poems": "Loading poems...",
+      "user_poems_title": "{{nickname}}'s Poems",
+      "delete_user": "Delete User",
+      "confirm_delete_user": "Are you sure you want to delete this user? All their poems will also be deleted!",
+      "user_deleted": "User deleted successfully",
+      "user_delete_failed": "Failed to delete user"
     }
   },
   sr: {
@@ -176,7 +190,14 @@ const resources = {
       "poet": "Pesnik",
       "read_more": "Čitaj više →",
       "collapse": "← Sažmi",
-      "all_rights_reserved": "Sva prava zadržana."
+      "all_rights_reserved": "Sva prava zadržana.",
+      "loading": "Učitava se...",
+      "loading_poems": "Učitavanje pesama...",
+      "user_poems_title": "{{nickname}} - Pesme",
+      "delete_user": "Obriši korisnika",
+      "confirm_delete_user": "Da li ste sigurni da želite da obrišete ovog korisnika? Sve njihove pesme će biti obrisane!",
+      "user_deleted": "Korisnik uspešno obrisan",
+      "user_delete_failed": "Brisanje korisnika nije uspelo"
     }
   },
   de: {
@@ -235,7 +256,14 @@ const resources = {
       "poet": "Dichter",
       "read_more": "Mehr lesen →",
       "collapse": "← Einklappen",
-      "all_rights_reserved": "Alle Rechte vorbehalten."
+      "all_rights_reserved": "Alle Rechte vorbehalten.",
+      "loading": "Wird geladen...",
+      "loading_poems": "Gedichte werden geladen...",
+      "user_poems_title": "Gedichte von {{nickname}}",
+      "delete_user": "Benutzer löschen",
+      "confirm_delete_user": "Möchten Sie diesen Benutzer wirklich löschen? Alle seine Gedichte werden ebenfalls gelöscht!",
+      "user_deleted": "Benutzer erfolgreich gelöscht",
+      "user_delete_failed": "Fehler beim Löschen des Benutzers"
     }
   }
 };

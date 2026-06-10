@@ -9,5 +9,6 @@ router.put('/profile', protect, authController.updateProfile);
 router.get('/user/:id', authController.getUserById);
 router.get('/notifications', protect, authController.getNotifications);
 router.put('/notifications/:notifId/read', protect, authController.markNotificationRead);
+router.delete('/user/:id', protect, authController.deleteUser);
 
 module.exports = router;

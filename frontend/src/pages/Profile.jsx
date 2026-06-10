@@ -74,6 +74,19 @@ function Profile() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!window.confirm(t('confirm_delete_user') || 'Bu kullanıcıyı silmek istediğinize emin misiniz? Tüm şiirleri silinecek!')) return;
+    try {
+      await axios.delete(`https://poemgarden.onrender.com/api/auth/user/${user._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      alert(t('user_deleted') || 'Kullanıcı silindi');
+      window.location.href = '/';
+    } catch (err) {
+      alert(t('user_delete_failed') || 'Kullanıcı silinirken hata oluştu.');
+    }
+  };
+
   const handleDeletePoem = async (poemId) => {
     if (!window.confirm(t('confirm_delete') || 'Are you sure?')) return;
     try {
@@ -132,7 +145,7 @@ function Profile() {
   const MAX_PREVIEW_LENGTH = 150;
 
   if (!user) {
-    return <div style={{ textAlign: 'center', color: '#888', padding: '20px', fontSize: '0.9rem', backgroundColor: COLORS.dark, minHeight: '100vh' }}>Yükleniyor...</div>;
+    return <div style={{ textAlign: 'center', color: '#888', padding: '20px', fontSize: '0.9rem', backgroundColor: COLORS.dark, minHeight: '100vh' }}>{t('loading')}</div>;
   }
 
   return (
@@ -159,6 +172,14 @@ function Profile() {
                 style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
               >
                 {t('edit_profile')}
+              </button>
+            )}
+            {!isOwnProfile && storedUser?.role === 'admin' && (
+              <button 
+                onClick={handleDeleteUser} 
+                style={{ padding: '8px 16px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', marginLeft: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
+              >
+                {t('delete_user') || 'Kullanıcıyı Sil'}
               </button>
             )}
           </>
@@ -203,7 +224,7 @@ function Profile() {
       </div>
 
       <div>
-        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{isOwnProfile ? t('my_poems') || 'My Poems' : `${user.nickname}'s Poems`}</h2>
+        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{isOwnProfile ? t('my_poems') || 'My Poems' : t('user_poems_title', { nickname: user.nickname }) || `${user.nickname}'s Poems`}</h2>
         {myPoems.length > 0 ? (
           myPoems.map(poem => {
             const isExpanded = expandedPoem === poem._id;

@@ -55,7 +55,7 @@ function Home() {
 
       <div>
         {loading ? (
-          <p style={{ textAlign: 'center', color: COLORS.primary, fontSize: '1rem', padding: '20px' }}>Şiirler yükleniyor...</p>
+          <p style={{ textAlign: 'center', color: COLORS.primary, fontSize: '1rem', padding: '20px' }}>{t('loading_poems')}</p>
         ) : poems && poems.length > 0 ? poems.map(poem => (
           <PoemCard 
             key={poem._id} 

@@ -43,7 +43,7 @@ exports.deletePoem = async (req, res) => {
         const poem = await Poem.findById(req.params.id);
         if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
         
-        if (poem.author.toString() !== req.user.id) {
+        if (poem.author && poem.author.toString() !== req.user.id && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Bu şiiri silmeye yetkiniz yok' });
         }
         

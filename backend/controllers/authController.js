@@ -32,7 +32,7 @@ const register = async (req, res) => {
         if (nicknameExists) return res.status(400).json({ message: 'Bu kullanıcı adı zaten alınmış.' });
 
         const user = await User.create({ firstName, lastName, email, nickname: cleanNickname, password });
-        res.status(201).json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar, token: generateToken(user._id) });
+        res.status(201).json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar, role: user.role, token: generateToken(user._id) });
     } catch (error) {
         res.status(500).json({ message: 'Kayıt hatası: ' + error.message });
     }
@@ -43,7 +43,7 @@ const login = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (user && (await bcrypt.compare(password, user.password))) {
-            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar, token: generateToken(user._id) });
+            res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar, role: user.role, token: generateToken(user._id) });
         } else {
             res.status(401).json({ message: 'Geçersiz bilgiler' });
         }
@@ -56,7 +56,7 @@ const updateProfile = async (req, res) => {
     try {
         const { firstName, lastName, bio, avatar } = req.body;
         const user = await User.findByIdAndUpdate(req.user.id, { firstName, lastName, bio, avatar }, { new: true });
-        res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar });
+        res.json({ _id: user._id, firstName: user.firstName, lastName: user.lastName, nickname: user.nickname, email: user.email, bio: user.bio, avatar: user.avatar, role: user.role });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -97,4 +97,22 @@ const markNotificationRead = async (req, res) => {
     }
 };
 
-module.exports = { register, login, updateProfile, getUserById, getNotifications, markNotificationRead };
+const deleteUser = async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Kullanıcı silme yetkiniz yok.' });
+        }
+        const userToDelete = await User.findById(req.params.id);
+        if (!userToDelete) return res.status(404).json({ message: 'Kullanıcı bulunamadı.' });
+        
+        const Poem = require('../models/Poem');
+        await Poem.deleteMany({ author: req.params.id });
+        
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Kullanıcı ve ona ait tüm şiirler silindi.' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { register, login, updateProfile, getUserById, getNotifications, markNotificationRead, deleteUser };
