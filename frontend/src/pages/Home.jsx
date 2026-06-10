@@ -23,13 +23,22 @@ function Home() {
   const [toastConfig, setToastConfig] = useState({ message: '', type: 'info' });
   
   const user = JSON.parse(localStorage.getItem('user'));
+  const urlParams = new URLSearchParams(window.location.search);
+  const openId = urlParams.get('open');
 
   const fetchPoems = async (p = page) => {
     try {
-      const res = await axios.get(`https://poemgarden.onrender.com/api/poems?page=${p}&limit=10`);
-      setPoems(res.data.poems || res.data);
-      setTotalPages(res.data.totalPages || 1);
-      setPage(res.data.currentPage || p);
+      if (openId) {
+        const res = await axios.get(`https://poemgarden.onrender.com/api/poems/${openId}`);
+        setPoems([res.data]);
+        setTotalPages(1);
+        setPage(1);
+      } else {
+        const res = await axios.get(`https://poemgarden.onrender.com/api/poems?page=${p}&limit=10`);
+        setPoems(res.data.poems || res.data);
+        setTotalPages(res.data.totalPages || 1);
+        setPage(res.data.currentPage || p);
+      }
     } catch (err) {
       console.error("Şiirler yüklenemedi:", err);
     } finally {
@@ -47,10 +56,21 @@ function Home() {
     <div style={{ padding: '20px 10px', color: COLORS.primary, maxWidth: '700px', margin: '0 auto', fontFamily: 'Arial, sans-serif', backgroundColor: COLORS.dark, minHeight: '100vh' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '20px', color: COLORS.primary, fontSize: '1.8rem' }}>{t('welcome')}</h1>
 
-      {user ? (
+      {user && !openId ? (
         <PoemForm onSuccess={() => fetchPoems(1)} setToast={setToastConfig} />
-      ) : (
+      ) : !user && !openId ? (
         <p style={{ textAlign: 'center', color: COLORS.primary, marginBottom: '20px', fontSize: '0.9rem' }}>{t('login_to_add_poem')}</p>
+      ) : null}
+
+      {openId && (
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <button 
+            onClick={() => window.location.href = '/'} 
+            style={{ padding: '8px 16px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            {t('see_all_poems') || 'Tüm Şiirleri Gör'}
+          </button>
+        </div>
       )}
 
       <div>

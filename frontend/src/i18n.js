@@ -78,7 +78,8 @@ const resources = {
       "joined_in": "{{date}} tarihinde katıldı",
       "copy_link": "Bağlantıyı Kopyala",
       "link_copied": "Bağlantı kopyalandı!",
-      "no_notifications": "Bildirim yok"
+      "no_notifications": "Bildirim yok",
+      "see_all_poems": "Tüm Şiirleri Gör"
     }
   },
   en: {
@@ -157,7 +158,8 @@ const resources = {
       "joined_in": "Joined in {{date}}",
       "copy_link": "Copy Link",
       "link_copied": "Link copied!",
-      "no_notifications": "No notifications"
+      "no_notifications": "No notifications",
+      "see_all_poems": "See All Poems"
     }
   },
   sr: {
@@ -236,7 +238,8 @@ const resources = {
       "joined_in": "Pridružio se {{date}}",
       "copy_link": "Kopiraj vezu",
       "link_copied": "Veza kopirana!",
-      "no_notifications": "Nema obaveštenja"
+      "no_notifications": "Nema obaveštenja",
+      "see_all_poems": "Pogledajte sve pesme"
     }
   },
   de: {
@@ -315,7 +318,8 @@ const resources = {
       "joined_in": "Beigetreten im {{date}}",
       "copy_link": "Link kopieren",
       "link_copied": "Link kopiert!",
-      "no_notifications": "Keine Benachrichtigungen"
+      "no_notifications": "Keine Benachrichtigungen",
+      "see_all_poems": "Alle Gedichte ansehen"
     }
   }
 };

@@ -1,5 +1,20 @@
 const Poem = require('../models/Poem');
 const User = require('../models/User');
+
+exports.getPoemById = async (req, res) => {
+    try {
+        const poem = await Poem.findById(req.params.id)
+            .populate('author', 'nickname avatar')
+            .populate('comments.author', 'nickname avatar')
+            .populate('comments.replies.author', 'nickname avatar');
+        
+        if (!poem) return res.status(404).json({ message: 'Şiir bulunamadı' });
+        res.json(poem);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.getPoems = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;

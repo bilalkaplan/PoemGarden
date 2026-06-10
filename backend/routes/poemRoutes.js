@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getPoems, createPoem, deletePoem, updatePoem, addComment, addReply, updateComment, deleteComment, updateReply, deleteReply, getUserComments } = require('../controllers/poemController');
+const { getPoems, getPoemById, createPoem, deletePoem, updatePoem, addComment, addReply, updateComment, deleteComment, updateReply, deleteReply, getUserComments } = require('../controllers/poemController');
 const { protect } = require('../middleware/auth');
 
 router.get('/', getPoems); 
+router.get('/:id', getPoemById);
 router.post('/', protect, createPoem); 
 router.delete('/:id', protect, deletePoem);
 router.put('/:id', protect, updatePoem);
