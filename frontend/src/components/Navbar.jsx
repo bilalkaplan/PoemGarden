@@ -23,8 +23,8 @@ function Navbar() {
   };
 
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '20px', backgroundColor: COLORS.darkBg, borderBottom: `2px solid ${COLORS.secondary}`, alignItems: 'center' }}>
-      <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+    <nav style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px 20px', backgroundColor: COLORS.darkBg, borderBottom: `2px solid ${COLORS.secondary}`, alignItems: 'center', gap: '15px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center', justifyContent: 'center' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: COLORS.primary, textDecoration: 'none', fontWeight: 'bold', fontSize: '1.4rem' }}>
           <img src="/poemgarden_logo_8.png" alt="Logo" style={{ height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
           PoemGarden
@@ -44,7 +44,7 @@ function Navbar() {
         )}
       </div>
       
-      <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
         {['tr', 'en', 'sr', 'de'].map(lang => {
           const flagUrls = { tr: 'https://flagcdn.com/w20/tr.png', en: 'https://flagcdn.com/w20/gb.png', sr: 'https://flagcdn.com/w20/rs.png', de: 'https://flagcdn.com/w20/de.png' };
           return (

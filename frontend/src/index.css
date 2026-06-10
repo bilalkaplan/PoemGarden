@@ -56,6 +56,7 @@ html, body, #root {
   border: none !important;
   background-color: #919D85 !important;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 body {
