@@ -312,7 +312,7 @@ function Profile() {
                       {displayContent}
                       {shouldTruncate && !isExpanded && '...'}
                     </p>
-                      {shouldTruncate && (
+                    {shouldTruncate && (
                       <button 
                         onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
                         style={{ backgroundColor: 'transparent', color: 'black', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
@@ -320,7 +320,9 @@ function Profile() {
                         {isExpanded ? t('collapse') : t('read_more')}
                       </button>
                     )}
-                    <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>Tarih: {new Date(poem.createdAt).toLocaleDateString('tr-TR')}</small>
+                    <div style={{ color: COLORS.primary, fontSize: '0.8rem', marginTop: '4px' }}>
+                      {t('date')}: {new Date(poem.createdAt).toLocaleDateString(i18n.language)}
+                    </div>
                     {isOwnProfile && (
                       <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
                         <button 

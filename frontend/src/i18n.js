@@ -79,7 +79,8 @@ const resources = {
       "copy_link": "Bağlantıyı Kopyala",
       "link_copied": "Bağlantı kopyalandı!",
       "no_notifications": "Bildirim yok",
-      "see_all_poems": "Tüm Şiirleri Gör"
+      "see_all_poems": "Tüm Şiirleri Gör",
+      "date": "Tarih"
     }
   },
   en: {
@@ -159,7 +160,8 @@ const resources = {
       "copy_link": "Copy Link",
       "link_copied": "Link copied!",
       "no_notifications": "No notifications",
-      "see_all_poems": "See All Poems"
+      "see_all_poems": "See All Poems",
+      "date": "Date"
     }
   },
   sr: {
@@ -239,7 +241,8 @@ const resources = {
       "copy_link": "Kopiraj vezu",
       "link_copied": "Veza kopirana!",
       "no_notifications": "Nema obaveštenja",
-      "see_all_poems": "Pogledajte sve pesme"
+      "see_all_poems": "Pogledajte sve pesme",
+      "date": "Datum"
     }
   },
   de: {
@@ -319,7 +322,8 @@ const resources = {
       "copy_link": "Link kopieren",
       "link_copied": "Link kopiert!",
       "no_notifications": "Keine Benachrichtigungen",
-      "see_all_poems": "Alle Gedichte ansehen"
+      "see_all_poems": "Alle Gedichte ansehen",
+      "date": "Datum"
     }
   }
 };
