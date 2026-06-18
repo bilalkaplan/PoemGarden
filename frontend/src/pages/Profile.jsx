@@ -5,11 +5,11 @@ import { useParams, Link } from 'react-router-dom';
 
 const COLORS = {
   primary: '#ffffff',
-  secondary: '#8b7355', 
+  secondary: '#feadb9', 
   tertiary: '#6b8e6f',
   dark: '#919D85',
   darkBg: '#738065',
-  accent: '#8b7355'
+  accent: '#feadb9'
 };
 
 function Profile() {

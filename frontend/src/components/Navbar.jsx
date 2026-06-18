@@ -4,7 +4,7 @@ import Notifications from './Notifications';
 
 const COLORS = {
   primary: '#2d2d2d',
-  secondary: '#8b7355',
+  secondary: '#feadb9',
   tertiary: '#6b8e6f',
   dark: '#919D85',
   darkBg: '#738065',
