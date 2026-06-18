@@ -22,6 +22,7 @@ function Navbar() {
     window.location.reload();
   };
 
+  return (
     <nav style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', padding: '15px 5%', backgroundColor: COLORS.darkBg, borderBottom: `2px solid ${COLORS.secondary}`, alignItems: 'center', gap: '20px' }}>
       
       {/* Logo ve Marka */}
