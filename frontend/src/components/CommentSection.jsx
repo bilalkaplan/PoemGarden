@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 
 const COLORS = {
   primary: '#ffffff',
-  secondary: '#feadb9',
+  secondary: '#e6e7e8',
   tertiary: '#6b8e6f',
-  accent: '#feadb9',
+  accent: '#e6e7e8',
   danger: '#c41c1c'
 };
 

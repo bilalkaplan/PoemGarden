@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 const COLORS = {
   success: '#6b8e6f',
   error: '#c41c1c',
-  info: '#feadb9',
+  info: '#e6e7e8',
   text: '#ffffff'
 };
 

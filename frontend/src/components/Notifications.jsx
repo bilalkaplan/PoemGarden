@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
 const COLORS = {
-  secondary: '#feadb9',
+  secondary: '#e6e7e8',
   dark: '#919D85',
   darkBg: '#738065',
   primary: '#2d2d2d'

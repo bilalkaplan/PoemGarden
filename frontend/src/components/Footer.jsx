@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 const COLORS = {
   primary: '#2d2d2d',
-  secondary: '#feadb9',
+  secondary: '#e6e7e8',
   darkBg: '#738065',
 };
 
