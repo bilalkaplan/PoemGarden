@@ -26,7 +26,7 @@ function Navbar() {
     <nav style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', padding: '15px 20px', backgroundColor: COLORS.darkBg, borderBottom: `2px solid ${COLORS.secondary}`, alignItems: 'center', gap: '15px' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'center', justifyContent: 'center' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', color: COLORS.primary, textDecoration: 'none', fontWeight: 'bold', fontSize: '1.4rem' }}>
-          <img src="/poemgarden_logo_8.png" alt="Logo" style={{ height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+          <img src="/logo.jpg" alt="Logo" style={{ height: '36px', width: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
           PoemGarden
         </Link>
         
