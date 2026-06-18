@@ -56,13 +56,13 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
 
   return (
-    <div style={{ backgroundColor: COLORS.darkBg, padding: '16px', borderRadius: '12px', marginBottom: '20px', border: `2px solid ${COLORS.secondary}`, outline: `1px solid ${COLORS.secondary}`, outlineOffset: '-6px', boxShadow: '0 8px 16px rgba(0,0,0,0.25)', position: 'relative' }}>
+    <div style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Link to={`/profile/${poem.author?._id}`} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
           <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
           <div>
-            <h3 style={{ margin: '0 0 4px 0', color: '#ffedd5', fontSize: '1.4rem', fontFamily: '"Georgia", "Times New Roman", serif', fontStyle: 'italic', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>{poem.title}</h3>
-            <small style={{ color: '#d1d5db', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1px' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>
+            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
+            <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>
           </div>
         </Link>
         <div style={{ position: 'relative' }}>
