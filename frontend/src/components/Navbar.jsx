@@ -43,7 +43,7 @@ function Navbar() {
           ) : (
             <>
               <Notifications />
-              <Link to="/profile" style={{ padding: '6px 14px', borderRadius: '4px', border: `1px solid ${COLORS.secondary}`, backgroundColor: COLORS.dark, color: 'white', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 'bold' }}>👤 {t('profile')}</Link>
+              <Link to="/profile" style={{ display: 'flex', alignItems: 'center', padding: '6px 14px', borderRadius: '4px', border: `1px solid ${COLORS.secondary}`, backgroundColor: COLORS.dark, color: 'white', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 'bold' }}><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>{t('profile')}</Link>
               <button onClick={handleLogout} style={{ padding: '6px 14px', borderRadius: '4px', border: `1px solid ${COLORS.secondary}`, backgroundColor: COLORS.dark, color: 'white', cursor: 'pointer', fontSize: '0.95rem', fontWeight: '500' }}>{t('logout')}</button>
             </>
           )}
