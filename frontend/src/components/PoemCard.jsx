@@ -58,13 +58,13 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   return (
     <div style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <Link to={`/profile/${poem.author?._id}`} style={{ display: 'flex', gap: '10px', marginBottom: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-          <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
-          <div>
-            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
-            <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{poem.author?.nickname || t('anonymous')}</small>
-          </div>
-        </Link>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+          <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.15rem' }}>{poem.title}</h3>
+          <Link to={`/profile/${poem.author?._id}`} style={{ display: 'inline-flex', gap: '8px', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+            <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+            <small style={{ color: COLORS.primary, fontSize: '0.85rem' }}>{poem.author?.nickname || t('anonymous')}</small>
+          </Link>
+        </div>
         <div style={{ position: 'relative' }}>
           <button onClick={() => setShowMenu(!showMenu)} style={{ background: 'none', border: 'none', color: COLORS.primary, fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>⋮</button>
           {showMenu && (
