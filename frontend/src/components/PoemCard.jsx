@@ -62,10 +62,10 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
           <Link to={`/profile/${poem.author?._id}`}>
             <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
           </Link>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingTop: '2px' }}>
-            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.15rem', lineHeight: '1.2' }}>{poem.title}</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4px', paddingTop: '2px' }}>
+            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.15rem', lineHeight: '1.2', textAlign: 'left' }}>{poem.title}</h3>
             <Link to={`/profile/${poem.author?._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <small style={{ color: COLORS.primary, fontSize: '0.9rem', opacity: 0.9 }}>@{poem.author?.nickname || t('anonymous')}</small>
+              <small style={{ color: COLORS.primary, fontSize: '0.9rem', opacity: 0.9 }}>{poem.author?.nickname || t('anonymous')}</small>
             </Link>
           </div>
         </div>
