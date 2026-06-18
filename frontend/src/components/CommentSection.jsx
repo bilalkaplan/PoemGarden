@@ -203,7 +203,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
                     />
                     <button 
                       onClick={() => handleAddReply(comment._id)}
-                      style={{ padding: '4px 8px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}
+                      style={{ padding: '4px 8px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}
                     >
                       {t('send')}
                     </button>
@@ -224,7 +224,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
             />
             <button 
                 onClick={handleAddComment}
-                style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
             >
                 {t('send')}
             </button>

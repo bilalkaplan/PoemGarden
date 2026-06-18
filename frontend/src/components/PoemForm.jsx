@@ -55,7 +55,7 @@ function PoemForm({ onSuccess, setToast }) {
           ))}
         </select>
       </div>
-      <button type="submit" style={{ width: '100%', padding: '8px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.95rem' }}>
+      <button type="submit" style={{ width: '100%', padding: '8px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.95rem' }}>
         {t('add_poem_btn')}
       </button>
     </form>

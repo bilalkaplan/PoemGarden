@@ -64,7 +64,7 @@ function Navbar() {
                 display: 'flex', alignItems: 'center', gap: '6px',
                 padding: '6px 10px', cursor: 'pointer', 
                 backgroundColor: i18n.language === lang ? COLORS.secondary : COLORS.dark, 
-                color: i18n.language === lang ? 'white' : '#f0f0f0', 
+                color: i18n.language === lang ? COLORS.primary : '#f0f0f0', 
                 border: `1px solid ${COLORS.secondary}`, borderRadius: '4px', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase' 
               }}
             >
