@@ -192,7 +192,7 @@ function Profile() {
             {isOwnProfile && (
               <button 
                 onClick={() => setIsEditing(true)} 
-                style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
+                style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
               >
                 {t('edit_profile')}
               </button>
@@ -239,7 +239,7 @@ function Profile() {
               )}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
+              <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
               <button type="button" onClick={() => setIsEditing(false)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
             </div>
           </form>
@@ -280,7 +280,7 @@ function Profile() {
                       ))}
                     </select>
                     <div style={{ display: 'flex', gap: '8px' }}>
-                      <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
+                      <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
                       <button type="button" onClick={() => setEditingPoemId(null)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
                     </div>
                   </form>
@@ -327,7 +327,7 @@ function Profile() {
                       <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
                         <button 
                           onClick={() => handleEditPoem(poem)}
-                          style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                          style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
                         >
                           {t('edit')}
                         </button>
