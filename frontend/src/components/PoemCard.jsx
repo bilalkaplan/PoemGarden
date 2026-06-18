@@ -62,7 +62,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
           <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
           <div>
             <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.1rem' }}>{poem.title}</h3>
-            <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('poet')}: {poem.author?.nickname || t('anonymous')}</small>
+            <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{poem.author?.nickname || t('anonymous')}</small>
           </div>
         </Link>
         <div style={{ position: 'relative' }}>
