@@ -1,61 +1,55 @@
 # PoemGarden
 
-**Canlı Demo (Live):** [https://poem-garden.vercel.app](https://poem-garden.vercel.app)
+**Live Demo:** [https://poem-garden.vercel.app](https://poem-garden.vercel.app)
 
-Bu proje, Web Geliştirme dersi dönemi projesi kapsamında geliştirilmiş bir MERN Stack (MongoDB, Express.js, React, Node.js) web uygulamasıdır. Kullanıcıların kayıt olup giriş yapabileceği, kendi şiirlerini paylaşıp diğer kullanıcıların şiirlerine yorum yapabileceği tam kapsamlı bir platformdur. Veritabanı ve sunucu kısımları buluta taşınmış olup, uygulama herkesin erişebileceği şekilde Vercel ve Render üzerinden **canlıya (deploy)** alınmıştır.
+PoemGarden is a comprehensive web application developed as a term project for a Web Development course. Built on the MERN Stack (MongoDB, Express.js, React, Node.js), it serves as a dedicated platform for poetry enthusiasts. Users can register, log in, share their original poems, and interact with other users' work through comments. The application is fully deployed, with the frontend hosted on Vercel and the backend hosted on Render, ensuring global accessibility.
 
-## Kullanılan Teknolojiler
+## Technology Stack
 
 **Frontend:**
-- React.js
-- React Router DOM
-- Axios
-- i18next (Çoklu dil desteği için: TR, EN, DE, SR)
+- React.js (Vite)
+- React Router DOM for routing
+- Axios for API requests
+- i18next for multi-language support (English, Turkish, Serbian, German)
 
 **Backend:**
 - Node.js
 - Express.js
-- MongoDB & Mongoose
-- JSON Web Token (JWT) ve bcryptjs (Kimlik doğrulama işlemleri için)
+- MongoDB & Mongoose for database modeling
+- JSON Web Token (JWT) and bcryptjs for secure authentication
 
-## Öne Çıkan Özellikler
-- **Çoklu Dil Desteği (i18n):** TR, EN, SR, DE dillerinde tam senkronizasyon.
-- **Rol Tabanlı Erişim:** Admin ve Şair (Poet) rolleri ile genişletilmiş yönetim.
-- **Gerçek Zamanlı Bildirimler:** Yorum ve yanıtlarda renk kodlu bildirim sistemi.
-- **Sosyal Paylaşım & Tekil Şiir Görünümü:** Şiir linklerini kopyalama ve paylaşılan linkle direkt sadece o şiiri (Tüm Şiirleri Gör butonu ile birlikte) özel sayfada görüntüleme.
-- **Optimistic UI:** Yorum silme/düzenleme işlemlerinde anında tepki süresi.
+## Core Features
 
-## Kurulum Adımları
+- **Multi-Language Support (i18n):** The application is fully synchronized across four languages: Turkish (TR), English (EN), Serbian (SR), and German (DE).
+- **Role-Based Access Control:** Differentiated access levels for standard users (Poets) and Administrators, allowing for structured content management.
+- **Custom UI Design:** A custom-crafted, blog-style interface tailored for reading. It features a harmonious color palette, optimal whitespace, serif typography for poems, and subtle micro-animations for an elevated user experience.
+- **Single Poem View & Deep Linking:** Users can copy links to specific poems. Opening these links isolates the poem on a dedicated view, with an option to return to the global feed.
+- **Real-Time Interactions:** Dynamic comment sections with support for nested replies and immediate UI feedback upon creation, deletion, or editing.
+- **Profile Management:** Users can update their biographies, names, and profile pictures. All original poems and comments are aggregated on the user's profile page.
 
-Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz.
+## Installation & Setup
 
-1. Projeyi bilgisayarınıza indirin ve klasöre girin:
+To run this project locally, follow the instructions below.
+
+1. Clone the repository and navigate to the project directory:
 ```bash
 git clone https://github.com/bilalkaplan/PoemGarden.git
 cd PoemGarden
 ```
 
-2. Backend (Sunucu) bağımlılıklarını kurun ve başlatın:
+2. Install backend dependencies and start the server:
 ```bash
 cd backend
 npm install
 npm run dev
 ```
 
-3. Frontend (Ön Yüz) bağımlılıklarını kurun ve başlatın (yeni bir terminal sekmesinde):
+3. Install frontend dependencies and start the development server (in a new terminal tab):
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-## Ekran Görüntüleri
-
-![Ana Sayfa Görünümü](./screenshots/home.png)
-*Ana Sayfa ve Şiir Listesi*
-
-![Profil ve Şiir Ekleme](./screenshots/profile.png)
-*Kullanıcı Profili ve Şiir Ekleme Ekranı*
-
-## Geliştirici
-Bilal Kaplan
+## Developer
+Bilal Kocakaplan

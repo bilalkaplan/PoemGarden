@@ -13,14 +13,14 @@ yarn.lock
 dist/
 build/
 *.tgz
+frontend/dist/
 
-# IDE
+# IDE & Editor
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
 
 # Logs
 logs/
@@ -29,14 +29,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS
+# OS specific files
 .DS_Store
 Thumbs.db
 
-# Frontend build
-frontend/dist/
-
-# Backend
+# Backend specific
 backend/node_modules/
 
 # Temporary files
