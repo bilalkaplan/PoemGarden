@@ -19,7 +19,6 @@ function Navbar() {
       {/* Sol: Logo ve Marka */}
       <div style={{ flex: 1, minWidth: '200px' }}>
         <Link to="/" className="nav-brand">
-          <img src="/logo.jpg" alt="Logo" onError={(e) => { e.target.onerror = null; e.target.src = '/default-avatar.svg'; }} />
           PoemGarden
         </Link>
       </div>

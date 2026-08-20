@@ -6,6 +6,7 @@ const resources = {
     translation: {
       "welcome": "PoemGarden'a Hoş Geldiniz",
       "add_poem": "Şiir Ekle",
+      "add_new_poem": "Bir şiir ekleyin",
       "login": "Giriş Yap",
       "register": "Kayıt Ol",
       "first_name": "Ad",
@@ -87,6 +88,7 @@ const resources = {
     translation: {
       "welcome": "Welcome to PoemGarden",
       "add_poem": "Add Poem",
+      "add_new_poem": "Add a poem",
       "login": "Login",
       "register": "Register",
       "first_name": "First Name",
@@ -168,6 +170,7 @@ const resources = {
     translation: {
       "welcome": "Dobrodošli u PoemGarden",
       "add_poem": "Dodaj Pesmu",
+      "add_new_poem": "Dodajte pesmu",
       "login": "Prijavi se",
       "register": "Registruj se",
       "first_name": "Ime",
@@ -249,6 +252,7 @@ const resources = {
     translation: {
       "welcome": "Willkommen bei PoemGarden",
       "add_poem": "Gedicht hinzufügen",
+      "add_new_poem": "Fügen Sie ein Gedicht hinzu",
       "login": "Anmelden",
       "register": "Registrieren",
       "first_name": "Vorname",
