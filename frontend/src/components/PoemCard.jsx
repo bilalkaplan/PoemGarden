@@ -4,15 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import CommentSection from './CommentSection';
 
-const COLORS = {
-  primary: '#ffffff',
-  secondary: '#e6e7e8',
-  tertiary: '#6b8e6f',
-  dark: '#919D85',
-  darkBg: '#738065',
-  accent: '#e6e7e8'
-};
-
 const DEFAULT_AVATAR = "/default-avatar.svg";
 
 function PoemCard({ poem, user, onUpdate, setToast }) {
@@ -20,14 +11,14 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [editingPoemId, setEditingPoemId] = useState(null);
-  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
+  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Lora' });
   const token = localStorage.getItem('token');
-  const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
-  const MAX_PREVIEW_LENGTH = 200;
+  const fonts = ['Lora', 'Georgia', 'Merriweather', 'Arial', 'Times New Roman'];
+  const MAX_PREVIEW_LENGTH = 300;
 
   const handleEditPoem = () => {
     setEditingPoemId(poem._id);
-    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Arial' });
+    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Lora' });
   };
 
   const handleUpdatePoem = async () => {
@@ -56,31 +47,32 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
   const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
 
   return (
-    <div style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'flex-start' }}>
+    <article className="blog-card">
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(0,0,0,0.04)', paddingBottom: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <Link to={`/profile/${poem.author?._id}`}>
-            <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}` }} />
+            <img src={poem.author?.avatar || DEFAULT_AVATAR} alt="Author" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(0,0,0,0.05)' }} />
           </Link>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '4px', paddingTop: '2px' }}>
-            <h3 style={{ margin: '0', color: COLORS.primary, fontSize: '1.15rem', lineHeight: '1.2', textAlign: 'left' }}>{poem.title}</h3>
-            <Link to={`/profile/${poem.author?._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-              <small style={{ color: COLORS.primary, fontSize: '0.9rem', opacity: 0.9 }}>{poem.author?.nickname || t('anonymous')}</small>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <h3 className="blog-title">{poem.title}</h3>
+            <Link to={`/profile/${poem.author?._id}`} className="blog-meta">
+              {poem.author?.nickname || t('anonymous')}
             </Link>
           </div>
         </div>
+        
         <div style={{ position: 'relative' }}>
-          <button onClick={() => setShowMenu(!showMenu)} style={{ background: 'none', border: 'none', color: COLORS.primary, fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>⋮</button>
+          <button onClick={() => setShowMenu(!showMenu)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.5rem', cursor: 'pointer', padding: '0 8px', lineHeight: 1 }}>⋮</button>
           {showMenu && (
-            <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: COLORS.dark, borderRadius: '4px', padding: '5px 0', zIndex: 10, boxShadow: '0 2px 5px rgba(0,0,0,0.2)', minWidth: '150px' }}>
+            <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: '#fff', borderRadius: '8px', padding: '8px 0', zIndex: 10, boxShadow: 'var(--shadow-md)', minWidth: '180px', border: '1px solid rgba(0,0,0,0.05)' }}>
               <button 
                 onClick={() => {
                   navigator.clipboard.writeText(window.location.origin + '/?open=' + poem._id);
                   if (setToast) setToast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
                   setShowMenu(false);
                 }}
-                style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', color: 'white', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem' }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = COLORS.darkBg}
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%', padding: '10px 16px', background: 'none', border: 'none', color: 'var(--text-main)', textAlign: 'left', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--font-sans)' }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(0,0,0,0.03)'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
               >
                 🔗 {t('copy_link') || 'Bağlantıyı Kopyala'}
@@ -88,49 +80,57 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
             </div>
           )}
         </div>
-      </div>
+      </header>
 
       {editingPoemId === poem._id ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <input value={editPoemData.title} onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })} style={{ padding: '8px', borderRadius: '6px', border: 'none', backgroundColor: '#444', color: COLORS.primary }} />
-          <textarea value={editPoemData.content} onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })} style={{ padding: '8px', height: '120px', borderRadius: '6px', border: 'none', backgroundColor: '#444', color: COLORS.primary, resize: 'none' }} />
-          <select value={editPoemData.font} onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })} style={{ padding: '6px 8px', borderRadius: '5px', border: 'none', boxSizing: 'border-box', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}>
-            {fonts.map(font => (
-              <option key={font} value={font} style={{ color: COLORS.primary }}>{font}</option>
-            ))}
-          </select>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <button onClick={handleUpdatePoem} style={{ padding: '8px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('save')}</button>
-            <button onClick={() => setEditingPoemId(null)} style={{ padding: '8px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('cancel')}</button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+          <input value={editPoemData.title} onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })} className="blog-input" style={{ fontSize: '1.2rem', fontFamily: 'var(--font-sans)' }} />
+          <textarea value={editPoemData.content} onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })} className="blog-textarea" style={{ fontSize: '1.1rem', fontFamily: editPoemData.font || 'var(--font-serif)', minHeight: '200px' }} />
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Font:</span>
+            <select value={editPoemData.font} onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })} className="blog-select" style={{ width: 'auto', marginBottom: 0 }}>
+              {fonts.map(font => (
+                <option key={font} value={font}>{font}</option>
+              ))}
+            </select>
+          </div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+            <button onClick={handleUpdatePoem} className="blog-btn blog-btn-primary">{t('save')}</button>
+            <button onClick={() => setEditingPoemId(null)} className="blog-btn blog-btn-ghost">{t('cancel')}</button>
           </div>
         </div>
       ) : (
-        <p style={{ fontSize: '0.95rem', color: COLORS.primary, fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '8px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '100px', overflow: 'hidden' }}>
-          {displayContent}
-          {shouldTruncate && !isExpanded && '...'}
-        </p>
-      )}
-      
-      {shouldTruncate && (
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          style={{ backgroundColor: 'transparent', color: 'black', border: 'none', cursor: 'pointer', fontSize: '0.85rem', padding: '0', marginBottom: '8px' }}
-        >
-          {isExpanded ? t('collapse') : t('read_more')}
-        </button>
+        <>
+          <p className="poem-content" style={{ fontFamily: poem.font === 'Arial' || !poem.font ? 'var(--font-serif)' : poem.font }}>
+            {displayContent}
+            {shouldTruncate && !isExpanded && '...'}
+          </p>
+          
+          {shouldTruncate && (
+            <div style={{ textAlign: 'center', margin: '24px 0' }}>
+              <button 
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="blog-btn blog-btn-secondary"
+                style={{ padding: '6px 16px', fontSize: '0.85rem', borderRadius: '20px' }}
+              >
+                {isExpanded ? t('collapse') : t('read_more')}
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {user && (poem.author?._id === user._id || user.role === 'admin') && (
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', justifyContent: 'flex-end', borderBottom: '1px solid rgba(0,0,0,0.04)', paddingBottom: '16px' }}>
           {poem.author?._id === user._id && (
-            <button onClick={handleEditPoem} style={{ padding: '6px 10px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('edit')}</button>
+            <button onClick={handleEditPoem} className="blog-btn blog-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>{t('edit')}</button>
           )}
-          <button onClick={handleDeletePoem} style={{ padding: '6px 10px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>{t('delete')}</button>
+          <button onClick={handleDeletePoem} className="blog-btn blog-btn-ghost" style={{ padding: '6px 12px', fontSize: '0.85rem', color: 'var(--danger)' }}>{t('delete')}</button>
         </div>
       )}
 
       <CommentSection poem={poem} user={user} onUpdate={onUpdate} setToast={setToast} />
-    </div>
+    </article>
   );
 }
 

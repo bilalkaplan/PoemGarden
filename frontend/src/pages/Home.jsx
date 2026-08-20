@@ -5,15 +5,6 @@ import PoemForm from '../components/PoemForm';
 import PoemCard from '../components/PoemCard';
 import Toast from '../components/Toast';
 
-const COLORS = {
-  primary: '#ffffff',
-  secondary: '#e6e7e8',
-  tertiary: '#6b8e6f',
-  dark: '#919D85',
-  darkBg: '#738065',
-  accent: '#e6e7e8'
-};
-
 function Home() {
   const { t } = useTranslation();
   const [poems, setPoems] = useState([]);
@@ -53,20 +44,25 @@ function Home() {
   }, [page]);
 
   return (
-    <div style={{ padding: '20px 10px', color: COLORS.primary, maxWidth: '700px', margin: '0 auto', fontFamily: 'Arial, sans-serif', backgroundColor: COLORS.dark, minHeight: '100vh' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px', color: COLORS.primary, fontSize: '1.8rem' }}>{t('welcome')}</h1>
+    <div className="blog-container">
+      <h1 className="blog-title" style={{ textAlign: 'center', marginBottom: '40px', fontSize: '2.5rem', color: '#fff' }}>
+        {t('welcome')}
+      </h1>
 
       {user && !openId ? (
         <PoemForm onSuccess={() => fetchPoems(1)} setToast={setToastConfig} />
       ) : !user && !openId ? (
-        <p style={{ textAlign: 'center', color: COLORS.primary, marginBottom: '20px', fontSize: '0.9rem' }}>{t('login_to_add_poem')}</p>
+        <p style={{ textAlign: 'center', color: '#fff', marginBottom: '40px', fontSize: '1.1rem', opacity: 0.9 }}>
+          {t('login_to_add_poem')}
+        </p>
       ) : null}
 
       {openId && (
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <button 
             onClick={() => window.location.href = '/'} 
-            style={{ padding: '8px 16px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+            className="blog-btn blog-btn-secondary"
+            style={{ fontWeight: 'bold' }}
           >
             {t('see_all_poems') || 'Tüm Şiirleri Gör'}
           </button>
@@ -75,7 +71,7 @@ function Home() {
 
       <div>
         {loading ? (
-          <p style={{ textAlign: 'center', color: COLORS.primary, fontSize: '1rem', padding: '20px' }}>{t('loading_poems')}</p>
+          <p style={{ textAlign: 'center', color: '#fff', fontSize: '1.1rem', padding: '40px' }}>{t('loading_poems')}</p>
         ) : poems && poems.length > 0 ? poems.map(poem => (
           <PoemCard 
             key={poem._id} 
@@ -85,16 +81,37 @@ function Home() {
             setToast={setToastConfig} 
           />
         )) : (
-          <p style={{ textAlign: 'center', color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_poems_yet')}</p>
+          <p style={{ textAlign: 'center', color: '#fff', fontSize: '1.1rem', opacity: 0.9 }}>{t('no_poems_yet')}</p>
         )}
 
         {totalPages > 1 && (
-          <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginTop: '12px' }}>
-            <button onClick={() => fetchPoems(Math.max(1, page-1))} disabled={page===1} style={{ padding: '6px 10px', borderRadius: '4px', border: 'none', backgroundColor: COLORS.darkBg, color: '#ffffff', cursor: page===1 ? 'not-allowed' : 'pointer', opacity: page===1 ? 0.5 : 1 }}>{t('prev') || 'Prev'}</button>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '32px' }}>
+            <button 
+              onClick={() => fetchPoems(Math.max(1, page-1))} 
+              disabled={page===1} 
+              className="blog-btn"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', cursor: page===1 ? 'not-allowed' : 'pointer', opacity: page===1 ? 0.5 : 1 }}
+            >
+              {t('prev') || 'Prev'}
+            </button>
             {Array.from({ length: totalPages }).map((_, idx) => (
-              <button key={idx} onClick={() => fetchPoems(idx+1)} style={{ padding: '6px 10px', borderRadius: '4px', border: `1px solid ${page===idx+1 ? COLORS.secondary : 'transparent'}`, backgroundColor: page===idx+1 ? COLORS.secondary : COLORS.darkBg, color: '#ffffff', cursor: 'pointer', fontWeight: page===idx+1 ? 'bold' : 'normal' }}>{idx+1}</button>
+              <button 
+                key={idx} 
+                onClick={() => fetchPoems(idx+1)} 
+                className="blog-btn"
+                style={{ backgroundColor: page===idx+1 ? '#fff' : 'rgba(255,255,255,0.2)', color: page===idx+1 ? 'var(--bg-color)' : '#fff', fontWeight: page===idx+1 ? 'bold' : 'normal' }}
+              >
+                {idx+1}
+              </button>
             ))}
-            <button onClick={() => fetchPoems(Math.min(totalPages, page+1))} disabled={page===totalPages} style={{ padding: '6px 10px', borderRadius: '4px', border: 'none', backgroundColor: COLORS.darkBg, color: '#ffffff', cursor: page===totalPages ? 'not-allowed' : 'pointer', opacity: page===totalPages ? 0.5 : 1 }}>{t('next') || 'Next'}</button>
+            <button 
+              onClick={() => fetchPoems(Math.min(totalPages, page+1))} 
+              disabled={page===totalPages} 
+              className="blog-btn"
+              style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: '#fff', cursor: page===totalPages ? 'not-allowed' : 'pointer', opacity: page===totalPages ? 0.5 : 1 }}
+            >
+              {t('next') || 'Next'}
+            </button>
           </div>
         )}
       </div>

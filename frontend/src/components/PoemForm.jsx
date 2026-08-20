@@ -2,17 +2,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const COLORS = {
-  primary: '#ffffff',
-  secondary: '#e6e7e8',
-  darkBg: '#738065',
-};
-
 function PoemForm({ onSuccess, setToast }) {
   const { t } = useTranslation();
-  const [newPoem, setNewPoem] = useState({ title: '', content: '', font: 'Arial' });
+  const [newPoem, setNewPoem] = useState({ title: '', content: '', font: 'Lora' });
   const token = localStorage.getItem('token');
-  const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
+  const fonts = ['Lora', 'Georgia', 'Merriweather', 'Arial', 'Times New Roman'];
 
   const handleAddPoem = async (e) => {
     e.preventDefault();
@@ -20,7 +14,7 @@ function PoemForm({ onSuccess, setToast }) {
         await axios.post('https://poemgarden.onrender.com/api/poems', newPoem, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        setNewPoem({ title: '', content: '', font: 'Arial' });
+        setNewPoem({ title: '', content: '', font: 'Lora' });
         if (onSuccess) onSuccess();
         if (setToast) setToast({ message: t('poem_added') || 'Şiir eklendi', type: 'success' });
     } catch (error) {
@@ -29,33 +23,40 @@ function PoemForm({ onSuccess, setToast }) {
   };
 
   return (
-    <form onSubmit={handleAddPoem} style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '25px', borderLeft: `4px solid ${COLORS.secondary}` }}>
+    <form onSubmit={handleAddPoem} className="blog-card" style={{ padding: '24px', marginBottom: '40px' }}>
+      <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.2rem', marginBottom: '16px', color: 'var(--text-main)' }}>
+        {t('add_new_poem') || 'Yeni Şiir Yaz'}
+      </h2>
       <input 
         placeholder={t('poem_title')} 
         value={newPoem.title} 
         onChange={(e) => setNewPoem({...newPoem, title: e.target.value})} 
         required
-        style={{ width: '100%', padding: '8px', marginBottom: '8px', borderRadius: '5px', border: 'none', boxSizing: 'border-box', fontSize: '0.95rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: newPoem.font }} 
+        className="blog-input"
+        style={{ fontFamily: newPoem.font === 'Lora' || newPoem.font === 'Merriweather' || newPoem.font === 'Georgia' ? newPoem.font : 'var(--font-sans)', fontSize: '1.2rem', fontWeight: '500' }} 
       />
       <textarea 
         placeholder={t('poem_content')} 
         value={newPoem.content} 
         onChange={(e) => setNewPoem({...newPoem, content: e.target.value})} 
         required
-        style={{ width: '100%', padding: '8px', height: '80px', borderRadius: '5px', border: 'none', marginBottom: '8px', boxSizing: 'border-box', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto', fontFamily: newPoem.font }} 
+        className="blog-textarea"
+        style={{ fontFamily: newPoem.font === 'Lora' || newPoem.font === 'Merriweather' || newPoem.font === 'Georgia' ? newPoem.font : 'var(--font-serif)', fontSize: '1.1rem', minHeight: '150px' }} 
       />
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Font:</span>
         <select 
           value={newPoem.font} 
           onChange={(e) => setNewPoem({...newPoem, font: e.target.value})}
-          style={{ padding: '6px 8px', borderRadius: '5px', border: 'none', boxSizing: 'border-box', fontSize: '0.85rem', flex: 1, backgroundColor: '#444', color: COLORS.primary }}
+          className="blog-select"
+          style={{ width: 'auto', marginBottom: 0, padding: '8px 12px' }}
         >
           {fonts.map(font => (
-            <option key={font} value={font} style={{ color: COLORS.primary }}>{font}</option>
+            <option key={font} value={font}>{font}</option>
           ))}
         </select>
       </div>
-      <button type="submit" style={{ width: '100%', padding: '8px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.95rem' }}>
+      <button type="submit" className="blog-btn blog-btn-primary" style={{ width: '100%', padding: '12px', fontSize: '1.05rem' }}>
         {t('add_poem_btn')}
       </button>
     </form>

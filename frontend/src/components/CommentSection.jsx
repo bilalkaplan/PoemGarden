@@ -3,14 +3,6 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-const COLORS = {
-  primary: '#ffffff',
-  secondary: '#e6e7e8',
-  tertiary: '#6b8e6f',
-  accent: '#e6e7e8',
-  danger: '#c41c1c'
-};
-
 const DEFAULT_AVATAR = "/default-avatar.svg";
 
 function CommentSection({ poem, user, onUpdate, setToast }) {
@@ -107,74 +99,76 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
   };
 
   return (
-    <div style={{ marginTop: '12px', textAlign: 'left' }}>
-      <div style={{ marginBottom: '8px' }}>
+    <div className="comment-section">
+      <div style={{ marginBottom: '16px' }}>
         {poem.comments && poem.comments.map(comment => (
-            <div key={comment._id} style={{ backgroundColor: '#333', padding: '8px 10px', borderRadius: '5px', marginBottom: '6px', borderLeft: `2px solid ${COLORS.accent}` }}>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginBottom: '4px' }}>
-                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}`, flexShrink: 0 }} />
+            <div key={comment._id} className="comment-box">
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <img src={comment.author?.avatar || DEFAULT_AVATAR} alt="Commenter" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.05)', flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
-                    <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: COLORS.secondary }}>
-                      <strong style={{ fontSize: '0.85rem' }}>{comment.author?.nickname}: </strong>
+                    <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600' }}>
+                      <span style={{ fontSize: '0.95rem' }}>{comment.author?.nickname}</span>
                     </Link>
                     {editingComment === comment._id ? (
-                      <div style={{ display: 'inline-flex', gap: '4px', alignItems: 'center', marginLeft: '4px' }}>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '8px' }}>
                         <input 
                           type="text" 
                           value={editCommentInput} 
                           onChange={(e) => setEditCommentInput(e.target.value)} 
-                          style={{ padding: '2px 4px', fontSize: '0.8rem', borderRadius: '3px', border: 'none', backgroundColor: '#555', color: 'white' }}
+                          className="blog-input"
+                          style={{ padding: '6px 10px', marginBottom: 0 }}
                         />
-                        <button onClick={() => handleUpdateComment(comment._id)} style={{ padding: '2px 6px', fontSize: '0.75rem', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>{t('save')}</button>
-                        <button onClick={() => setEditingComment(null)} style={{ padding: '2px 6px', fontSize: '0.75rem', backgroundColor: 'transparent', color: 'white', border: 'none', cursor: 'pointer' }}>{t('cancel')}</button>
+                        <button onClick={() => handleUpdateComment(comment._id)} className="blog-btn blog-btn-primary" style={{ padding: '6px 12px' }}>{t('save')}</button>
+                        <button onClick={() => setEditingComment(null)} className="blog-btn blog-btn-ghost" style={{ padding: '6px 12px' }}>{t('cancel')}</button>
                       </div>
                     ) : (
-                      <>
-                        <span style={{ fontSize: '0.85rem', color: COLORS.primary, wordBreak: 'break-word' }}>{comment.text}</span>
-                        {comment.edited && <span style={{ fontSize: '0.7rem', color: '#aaa', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
-                      </>
+                      <div style={{ marginTop: '4px' }}>
+                        <span style={{ fontSize: '0.95rem', color: 'var(--text-main)', wordBreak: 'break-word', lineHeight: 1.5 }}>{comment.text}</span>
+                        {comment.edited && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
+                      </div>
                     )}
                     
                     {user && (user._id === comment.author?._id || user.role === 'admin') && editingComment !== comment._id && (
-                      <div style={{ display: 'inline-flex', gap: '8px', marginLeft: '8px' }}>
-                        <button onClick={() => { setEditingComment(comment._id); setEditCommentInput(comment.text); }} style={{ background: 'none', border: 'none', color: COLORS.secondary, cursor: 'pointer', padding: 0, fontSize: '0.75rem' }}>{t('edit')}</button>
-                        <button onClick={() => handleDeleteComment(comment._id)} style={{ background: 'none', border: 'none', color: COLORS.danger, cursor: 'pointer', padding: 0, fontSize: '0.75rem' }}>{t('delete')}</button>
+                      <div style={{ display: 'inline-flex', gap: '12px', marginTop: '8px' }}>
+                        <button onClick={() => { setEditingComment(comment._id); setEditCommentInput(comment.text); }} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0, fontSize: '0.8rem', fontWeight: 500 }}>{t('edit')}</button>
+                        <button onClick={() => handleDeleteComment(comment._id)} style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: 0, fontSize: '0.8rem', fontWeight: 500 }}>{t('delete')}</button>
                       </div>
                     )}
                   </div>
                 </div>
                 
                 {comment.replies && comment.replies.length > 0 && (
-                  <div style={{ marginTop: '6px', paddingLeft: '10px', borderLeft: `2px solid ${COLORS.tertiary}` }}>
+                  <div style={{ marginTop: '12px', paddingLeft: '16px', borderLeft: '2px solid rgba(0,0,0,0.05)' }}>
                     {comment.replies.map(reply => (
-                      <div key={reply._id} style={{ marginBottom: '6px', display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover', border: `1px solid ${COLORS.secondary}`, flexShrink: 0 }} />
+                      <div key={reply._id} style={{ marginBottom: '12px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                          <img src={reply.author?.avatar || DEFAULT_AVATAR} alt="Replier" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.05)', flexShrink: 0 }} />
                           <div style={{ flex: 1 }}>
-                            <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: COLORS.tertiary }}>
-                              <strong style={{ fontSize: '0.8rem' }}>{reply.author?.nickname}: </strong>
+                            <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600' }}>
+                              <span style={{ fontSize: '0.9rem' }}>{reply.author?.nickname}</span>
                             </Link>
                             {editingReply === reply._id ? (
-                              <div style={{ display: 'inline-flex', gap: '4px', alignItems: 'center', marginLeft: '4px' }}>
+                              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '6px' }}>
                                 <input 
                                   type="text" 
                                   value={editReplyInput} 
                                   onChange={(e) => setEditReplyInput(e.target.value)} 
-                                  style={{ padding: '2px 4px', fontSize: '0.75rem', borderRadius: '3px', border: 'none', backgroundColor: '#555', color: 'white' }}
+                                  className="blog-input"
+                                  style={{ padding: '6px 10px', marginBottom: 0 }}
                                 />
-                                <button onClick={() => handleUpdateReply(comment._id, reply._id)} style={{ padding: '2px 6px', fontSize: '0.7rem', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}>{t('save')}</button>
-                                <button onClick={() => setEditingReply(null)} style={{ padding: '2px 6px', fontSize: '0.7rem', backgroundColor: 'transparent', color: 'white', border: 'none', cursor: 'pointer' }}>{t('cancel')}</button>
+                                <button onClick={() => handleUpdateReply(comment._id, reply._id)} className="blog-btn blog-btn-primary" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>{t('save')}</button>
+                                <button onClick={() => setEditingReply(null)} className="blog-btn blog-btn-ghost" style={{ padding: '4px 10px', fontSize: '0.8rem' }}>{t('cancel')}</button>
                               </div>
                             ) : (
-                              <>
-                                <span style={{ fontSize: '0.8rem', color: COLORS.primary, wordBreak: 'break-word' }}>{reply.text}</span>
-                                {reply.edited && <span style={{ fontSize: '0.65rem', color: '#aaa', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
-                              </>
+                              <div style={{ marginTop: '2px' }}>
+                                <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', wordBreak: 'break-word', lineHeight: 1.5 }}>{reply.text}</span>
+                                {reply.edited && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
+                              </div>
                             )}
 
                             {user && (user._id === reply.author?._id || user.role === 'admin') && editingReply !== reply._id && (
-                              <div style={{ display: 'inline-flex', gap: '8px', marginLeft: '8px' }}>
-                                <button onClick={() => { setEditingReply(reply._id); setEditReplyInput(reply.text); }} style={{ background: 'none', border: 'none', color: COLORS.secondary, cursor: 'pointer', padding: 0, fontSize: '0.7rem' }}>{t('edit')}</button>
-                                <button onClick={() => handleDeleteReply(comment._id, reply._id)} style={{ background: 'none', border: 'none', color: COLORS.danger, cursor: 'pointer', padding: 0, fontSize: '0.7rem' }}>{t('delete')}</button>
+                              <div style={{ display: 'inline-flex', gap: '12px', marginTop: '6px' }}>
+                                <button onClick={() => { setEditingReply(reply._id); setEditReplyInput(reply.text); }} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0, fontSize: '0.8rem', fontWeight: 500 }}>{t('edit')}</button>
+                                <button onClick={() => handleDeleteReply(comment._id, reply._id)} style={{ background: 'none', border: 'none', color: 'var(--danger)', cursor: 'pointer', padding: 0, fontSize: '0.8rem', fontWeight: 500 }}>{t('delete')}</button>
                               </div>
                             )}
                           </div>
@@ -186,24 +180,26 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
                 {user && (
                   <button 
                     onClick={() => setReplyingTo({ ...replyingTo, [comment._id]: !replyingTo[comment._id] })}
-                    style={{ backgroundColor: 'transparent', color: COLORS.secondary, border: 'none', cursor: 'pointer', fontSize: '0.75rem', padding: '2px 0', marginTop: '4px', textDecoration: 'underline' }}
+                    style={{ backgroundColor: 'transparent', color: 'var(--accent)', border: 'none', cursor: 'pointer', fontSize: '0.85rem', padding: '4px 0', marginTop: '8px', fontWeight: 600 }}
                   >
                     {t('reply')}
                   </button>
                 )}
 
                 {replyingTo[comment._id] && (
-                  <div style={{ marginTop: '6px', display: 'flex', gap: '4px' }}>
+                  <div style={{ marginTop: '12px', display: 'flex', gap: '8px' }}>
                     <input 
                       type="text" 
                       placeholder={t('reply_placeholder')}
                       value={replyInputs[comment._id] || ''}
                       onChange={(e) => setReplyInputs({ ...replyInputs, [comment._id]: e.target.value })}
-                      style={{ flex: 1, padding: '4px 6px', borderRadius: '4px', border: 'none', backgroundColor: '#444', color: COLORS.primary, fontSize: '0.8rem' }}
+                      className="blog-input"
+                      style={{ marginBottom: 0, padding: '8px 12px' }}
                     />
                     <button 
                       onClick={() => handleAddReply(comment._id)}
-                      style={{ padding: '4px 8px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}
+                      className="blog-btn blog-btn-primary"
+                      style={{ padding: '8px 16px' }}
                     >
                       {t('send')}
                     </button>
@@ -214,23 +210,26 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
       </div>
 
       {user ? (
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginTop: '24px' }}>
             <input 
                 type="text" 
                 placeholder={t('write_comment')} 
                 value={commentInput}
                 onChange={(e) => setCommentInput(e.target.value)}
-                style={{ flex: 1, padding: '6px 8px', borderRadius: '4px', border: 'none', backgroundColor: '#444', color: COLORS.primary, fontSize: '0.85rem' }}
+                className="blog-input"
+                style={{ marginBottom: 0 }}
             />
             <button 
                 onClick={handleAddComment}
-                style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: '#333', fontWeight: 'bold', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.85rem' }}
+                className="blog-btn blog-btn-primary"
             >
                 {t('send')}
             </button>
         </div>
       ) : (
-        <small style={{ color: COLORS.primary, fontSize: '0.8rem' }}>{t('login_to_comment')}</small>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontStyle: 'italic', marginTop: '24px' }}>
+          {t('login_to_comment')}
+        </p>
       )}
     </div>
   );

@@ -3,15 +3,6 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 
-const COLORS = {
-  primary: '#ffffff',
-  secondary: '#e6e7e8', 
-  tertiary: '#6b8e6f',
-  dark: '#919D85',
-  darkBg: '#738065',
-  accent: '#e6e7e8'
-};
-
 function Profile() {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
@@ -22,7 +13,7 @@ function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({ firstName: '', lastName: '', bio: '', avatar: '' });
   const [editingPoemId, setEditingPoemId] = useState(null);
-  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Arial' });
+  const [editPoemData, setEditPoemData] = useState({ title: '', content: '', font: 'Lora' });
   const [expandedPoem, setExpandedPoem] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [toast, setToast] = useState(null);
@@ -118,7 +109,7 @@ function Profile() {
 
   const handleEditPoem = (poem) => {
     setEditingPoemId(poem._id);
-    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Arial' });
+    setEditPoemData({ title: poem.title, content: poem.content, font: poem.font || 'Lora' });
   };
 
   const handleUpdatePoem = async (e) => {
@@ -159,95 +150,108 @@ function Profile() {
   };
 
 
-  const fonts = ['Arial', 'Georgia', 'Times New Roman', 'Courier New', 'Verdana', 'Comic Sans MS'];
+  const fonts = ['Lora', 'Georgia', 'Merriweather', 'Arial', 'Times New Roman'];
   const MAX_PREVIEW_LENGTH = 150;
 
   if (!user) {
-    return <div style={{ textAlign: 'center', color: '#888', padding: '20px', fontSize: '0.9rem', backgroundColor: COLORS.dark, minHeight: '100vh' }}>{t('loading')}</div>;
+    return <div style={{ textAlign: 'center', color: '#fff', padding: '40px', fontSize: '1.1rem', minHeight: '100vh' }}>{t('loading')}</div>;
   }
 
   return (
-    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px 10px', color: COLORS.primary, backgroundColor: COLORS.dark, minHeight: '100vh' }}>
-      <h1 style={{ color: COLORS.primary, marginBottom: '20px', fontSize: '1.8rem' }}>{t('profile')}</h1>
+    <div className="blog-container">
+      <h1 className="blog-title" style={{ color: '#fff', marginBottom: '32px', fontSize: '2.5rem', textAlign: 'center' }}>{t('profile')}</h1>
 
-      <div style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '25px', borderLeft: `4px solid ${COLORS.secondary}` }}>
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-start', marginBottom: '15px' }}>
-          <img src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${COLORS.secondary}` }} />
+      <div className="blog-card" style={{ marginBottom: '40px', padding: '40px' }}>
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', marginBottom: '24px' }}>
+          <img src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(0,0,0,0.05)' }} />
           <div>
-            <h2 style={{ fontSize: '1.3rem', color: COLORS.primary, margin: 0 }}>{user.nickname}</h2>
+            <h2 className="blog-title" style={{ fontSize: '1.8rem', margin: 0 }}>{user.nickname}</h2>
             {user.createdAt && (
-              <p style={{ fontSize: '0.75rem', color: '#ccc', margin: '2px 0 8px 0', fontStyle: 'italic' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '4px 0 12px 0', fontStyle: 'italic' }}>
                 {t('joined_in', { date: new Date(user.createdAt).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }) })}
               </p>
             )}
-            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}>{user.bio}</p>
+            <p style={{ fontSize: '1.05rem', margin: '8px 0', color: 'var(--text-main)', lineHeight: 1.5 }}>{user.bio}</p>
           </div>
         </div>
 
         {!isEditing || !isOwnProfile ? (
-          <>
-            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('first_name')}:</strong> {user.firstName}</p>
-            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('last_name')}:</strong> {user.lastName}</p>
-            <p style={{ fontSize: '0.9rem', margin: '5px 0', color: COLORS.primary }}><strong>{t('email')}:</strong> {user.email}</p>
-            {isOwnProfile && (
-              <button 
-                onClick={() => setIsEditing(true)} 
-                style={{ padding: '8px 16px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
-              >
-                {t('edit_profile')}
-              </button>
-            )}
-            {!isOwnProfile && storedUser?.role === 'admin' && (
-              <button 
-                onClick={handleDeleteUser} 
-                style={{ padding: '8px 16px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px', marginLeft: '10px', fontSize: '0.85rem', fontWeight: 'bold' }}
-              >
-                {t('delete_user') || 'Kullanıcıyı Sil'}
-              </button>
-            )}
-          </>
+          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+            <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('first_name')}:</strong> {user.firstName}</p>
+            <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('last_name')}:</strong> {user.lastName}</p>
+            <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('email')}:</strong> {user.email}</p>
+            
+            <div style={{ marginTop: '24px', display: 'flex', gap: '12px' }}>
+              {isOwnProfile && (
+                <button 
+                  onClick={() => setIsEditing(true)} 
+                  className="blog-btn blog-btn-secondary"
+                  style={{ padding: '8px 16px' }}
+                >
+                  {t('edit_profile')}
+                </button>
+              )}
+              {!isOwnProfile && storedUser?.role === 'admin' && (
+                <button 
+                  onClick={handleDeleteUser} 
+                  className="blog-btn blog-btn-danger"
+                  style={{ padding: '8px 16px' }}
+                >
+                  {t('delete_user') || 'Kullanıcıyı Sil'}
+                </button>
+              )}
+            </div>
+          </div>
         ) : (
-          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <input 
-              value={editData.firstName} 
-              onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
-              placeholder={t('first_name')}
-              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
-            />
-            <input 
-              value={editData.lastName} 
-              onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
-              placeholder={t('last_name')}
-              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary }}
-            />
+          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <input 
+                value={editData.firstName} 
+                onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
+                placeholder={t('first_name')}
+                className="blog-input"
+                style={{ flex: 1, marginBottom: 0 }}
+              />
+              <input 
+                value={editData.lastName} 
+                onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
+                placeholder={t('last_name')}
+                className="blog-input"
+                style={{ flex: 1, marginBottom: 0 }}
+              />
+            </div>
             <textarea 
               value={editData.bio} 
               onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
               placeholder={t('bio') || 'Biyografi'}
-              style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', height: '60px', backgroundColor: '#444', color: COLORS.primary, resize: 'none', overflow: 'auto' }}
+              className="blog-textarea"
+              style={{ minHeight: '80px', marginBottom: 0 }}
             />
-            <div style={{ padding: '10px', backgroundColor: '#333', borderRadius: '5px' }}>
-              <label style={{ fontSize: '0.85rem', color: COLORS.primary, display: 'block', marginBottom: '8px' }}>{t('profile_photo') || 'Profil Fotoğrafı (Zorunlu Değil)'}</label>
+            <div style={{ padding: '16px', backgroundColor: 'rgba(0,0,0,0.02)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(0,0,0,0.05)' }}>
+              <label style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block', marginBottom: '12px', fontWeight: 500 }}>{t('profile_photo') || 'Profil Fotoğrafı (Zorunlu Değil)'}</label>
               <input 
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarUpload}
-                style={{ fontSize: '0.8rem', color: 'black', outline: 'none' }}
+                style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}
               />
               {editData.avatar && !editData.avatar.includes('<svg') && (
-                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', marginTop: '8px', border: `2px solid ${COLORS.secondary}` }} />
+                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginTop: '16px', border: '2px solid rgba(0,0,0,0.05)', display: 'block' }} />
               )}
             </div>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
-              <button type="button" onClick={() => setIsEditing(false)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+              <button type="submit" className="blog-btn blog-btn-primary" style={{ padding: '10px 20px' }}>{t('save')}</button>
+              <button type="button" onClick={() => setIsEditing(false)} className="blog-btn blog-btn-ghost" style={{ padding: '10px 20px' }}>{t('cancel')}</button>
             </div>
           </form>
         )}
       </div>
 
-      <div>
-        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{isOwnProfile ? t('my_poems') || 'My Poems' : t('user_poems_title', { nickname: user.nickname }) || `${user.nickname}'s Poems`}</h2>
+      <div style={{ marginTop: '48px' }}>
+        <h2 className="blog-title" style={{ color: '#fff', marginBottom: '24px', fontSize: '1.8rem', textAlign: 'center' }}>
+          {isOwnProfile ? t('my_poems') || 'My Poems' : t('user_poems_title', { nickname: user.nickname }) || `${user.nickname}'s Poems`}
+        </h2>
+        
         {myPoems.length > 0 ? (
           myPoems.map(poem => {
             const isExpanded = expandedPoem === poem._id;
@@ -255,51 +259,57 @@ function Profile() {
             const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
             
             return (
-              <div key={poem._id} style={{ backgroundColor: COLORS.darkBg, padding: '12px', borderRadius: '8px', marginBottom: '12px', borderLeft: `3px solid ${COLORS.secondary}` }}>
+              <article key={poem._id} className="blog-card">
                 {editingPoemId === poem._id ? (
-                  <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <input 
                       value={editPoemData.title} 
                       onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
                       placeholder={t('poem_title')}
-                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.9rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: editPoemData.font }}
+                      className="blog-input"
+                      style={{ fontSize: '1.2rem', fontFamily: 'var(--font-sans)', marginBottom: 0 }}
                     />
                     <textarea 
                       value={editPoemData.content} 
                       onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
                       placeholder={t('poem_content')}
-                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', height: '100px', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary, fontFamily: editPoemData.font }}
+                      className="blog-textarea"
+                      style={{ minHeight: '150px', fontSize: '1.1rem', fontFamily: editPoemData.font || 'var(--font-serif)', marginBottom: 0 }}
                     />
-                    <select 
-                      value={editPoemData.font} 
-                      onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
-                      style={{ padding: '8px 10px', borderRadius: '5px', border: 'none', fontSize: '0.85rem', backgroundColor: '#444', color: COLORS.primary }}
-                    >
-                      {fonts.map(font => (
-                        <option key={font} value={font} style={{ color: COLORS.primary }}>{font}</option>
-                      ))}
-                    </select>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <button type="submit" style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 'bold' }}>{t('save')}</button>
-                      <button type="button" onClick={() => setEditingPoemId(null)} style={{ flex: 1, padding: '8px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.85rem' }}>{t('cancel')}</button>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Font:</span>
+                      <select 
+                        value={editPoemData.font} 
+                        onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
+                        className="blog-select"
+                        style={{ width: 'auto', marginBottom: 0, padding: '8px 12px' }}
+                      >
+                        {fonts.map(font => (
+                          <option key={font} value={font}>{font}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+                      <button type="submit" className="blog-btn blog-btn-primary">{t('save')}</button>
+                      <button type="button" onClick={() => setEditingPoemId(null)} className="blog-btn blog-btn-ghost">{t('cancel')}</button>
                     </div>
                   </form>
                 ) : (
                   <>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <h3 style={{ margin: '0 0 6px 0', color: COLORS.primary, fontSize: '1.05rem' }}>{poem.title}</h3>
+                    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(0,0,0,0.04)', paddingBottom: '16px', marginBottom: '24px' }}>
+                      <h3 className="blog-title" style={{ margin: 0, fontSize: '1.4rem' }}>{poem.title}</h3>
                       <div style={{ position: 'relative' }}>
-                        <button onClick={() => setOpenMenuId(openMenuId === poem._id ? null : poem._id)} style={{ background: 'none', border: 'none', color: COLORS.primary, fontSize: '1.2rem', cursor: 'pointer', padding: '0 5px' }}>⋮</button>
+                        <button onClick={() => setOpenMenuId(openMenuId === poem._id ? null : poem._id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.5rem', cursor: 'pointer', padding: '0 8px', lineHeight: 1 }}>⋮</button>
                         {openMenuId === poem._id && (
-                          <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: COLORS.dark, borderRadius: '4px', padding: '5px 0', zIndex: 10, boxShadow: '0 2px 5px rgba(0,0,0,0.2)', minWidth: '150px' }}>
+                          <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: '#fff', borderRadius: '8px', padding: '8px 0', zIndex: 10, boxShadow: 'var(--shadow-md)', minWidth: '180px', border: '1px solid rgba(0,0,0,0.05)' }}>
                             <button 
                               onClick={() => {
                                 navigator.clipboard.writeText(window.location.origin + '/?open=' + poem._id);
-                                setToast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
+                                if (toast) toast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
                                 setOpenMenuId(null);
                               }}
-                              style={{ display: 'block', width: '100%', padding: '8px 12px', background: 'none', border: 'none', color: 'white', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem' }}
-                              onMouseEnter={(e) => e.target.style.backgroundColor = COLORS.darkBg}
+                              style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%', padding: '10px 16px', background: 'none', border: 'none', color: 'var(--text-main)', textAlign: 'left', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--font-sans)' }}
+                              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(0,0,0,0.03)'}
                               onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                             >
                               🔗 {t('copy_link') || 'Bağlantıyı Kopyala'}
@@ -307,33 +317,38 @@ function Profile() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    <p style={{ fontSize: '0.9rem', color: COLORS.primary, fontStyle: 'italic', whiteSpace: 'pre-wrap', marginBottom: '6px', fontFamily: poem.font || 'Arial', maxHeight: isExpanded ? 'none' : '80px', overflow: 'hidden' }}>
+                    </header>
+                    <p className="poem-content" style={{ fontFamily: poem.font === 'Arial' || !poem.font ? 'var(--font-serif)' : poem.font }}>
                       {displayContent}
                       {shouldTruncate && !isExpanded && '...'}
                     </p>
                     {shouldTruncate && (
-                      <button 
-                        onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
-                        style={{ backgroundColor: 'transparent', color: 'black', border: 'none', cursor: 'pointer', fontSize: '0.8rem', padding: '0', marginBottom: '6px' }}
-                      >
-                        {isExpanded ? t('collapse') : t('read_more')}
-                      </button>
+                      <div style={{ textAlign: 'center', margin: '24px 0' }}>
+                        <button 
+                          onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
+                          className="blog-btn blog-btn-secondary"
+                          style={{ padding: '6px 16px', fontSize: '0.85rem', borderRadius: '20px' }}
+                        >
+                          {isExpanded ? t('collapse') : t('read_more')}
+                        </button>
+                      </div>
                     )}
-                    <div style={{ color: COLORS.primary, fontSize: '0.8rem', marginTop: '4px' }}>
+                    <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '16px', borderTop: '1px solid rgba(0,0,0,0.04)', paddingTop: '16px' }}>
                       {t('date')}: {new Date(poem.createdAt).toLocaleDateString(i18n.language)}
                     </div>
                     {isOwnProfile && (
-                      <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                      <div style={{ marginTop: '16px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
                         <button 
                           onClick={() => handleEditPoem(poem)}
-                          style={{ padding: '6px 12px', backgroundColor: COLORS.secondary, color: '#333', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+                          className="blog-btn blog-btn-secondary"
+                          style={{ padding: '6px 12px', fontSize: '0.85rem' }}
                         >
                           {t('edit')}
                         </button>
                         <button 
                           onClick={() => handleDeletePoem(poem._id)}
-                          style={{ padding: '6px 12px', backgroundColor: '#c41c1c', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
+                          className="blog-btn blog-btn-ghost"
+                          style={{ padding: '6px 12px', fontSize: '0.85rem', color: 'var(--danger)' }}
                         >
                           {t('delete')}
                         </button>
@@ -341,34 +356,34 @@ function Profile() {
                     )}
                   </>
                 )}
-              </div>
+              </article>
             );
           })
         ) : (
-          <p style={{ color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_poems_yet')}</p>
+          <p style={{ color: '#fff', fontSize: '1.1rem', textAlign: 'center', opacity: 0.9 }}>{t('no_poems_yet')}</p>
         )}
       </div>
 
-      <div style={{ marginTop: '30px' }}>
-        <h2 style={{ color: COLORS.primary, marginBottom: '15px', fontSize: '1.3rem' }}>{t('my_comments') || 'Yorumlarım'}</h2>
+      <div style={{ marginTop: '64px' }}>
+        <h2 className="blog-title" style={{ color: '#fff', marginBottom: '24px', fontSize: '1.8rem', textAlign: 'center' }}>{t('my_comments') || 'Yorumlarım'}</h2>
         {myComments.length > 0 ? (
           myComments.map(comment => (
-            <div key={comment._id} style={{ backgroundColor: COLORS.darkBg, padding: '15px', borderRadius: '10px', marginBottom: '15px', borderLeft: `4px solid ${COLORS.secondary}` }}>
+            <div key={comment._id} className="blog-card" style={{ padding: '24px' }}>
               {comment.type === 'reply' && comment.parentCommentText && (
-                <div style={{ fontSize: '0.8rem', color: '#ccc', fontStyle: 'italic', marginBottom: '8px', paddingLeft: '8px', borderLeft: '2px solid #555' }}>
+                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '12px', paddingLeft: '12px', borderLeft: '3px solid rgba(0,0,0,0.1)' }}>
                   "{comment.parentCommentText}"
                 </div>
               )}
-              <div style={{ fontSize: '0.9rem', color: COLORS.primary, marginBottom: '8px', wordBreak: 'break-word' }}>
+              <div style={{ fontSize: '1rem', color: 'var(--text-main)', marginBottom: '16px', wordBreak: 'break-word', lineHeight: 1.5 }}>
                 {comment.text}
-                {comment.edited && <span style={{ fontSize: '0.7rem', color: '#aaa', marginLeft: '6px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
+                {comment.edited && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '8px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.75rem', color: '#ccc' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(0,0,0,0.04)', paddingTop: '16px' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   {new Date(comment.createdAt).toLocaleDateString()}
                 </span>
                 <Link to="/" style={{ textDecoration: 'none' }}>
-                  <button style={{ padding: '4px 10px', backgroundColor: COLORS.tertiary, color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}>
+                  <button className="blog-btn blog-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
                     {t('go_to_poem')} "{comment.poemTitle}"
                   </button>
                 </Link>
@@ -376,7 +391,7 @@ function Profile() {
             </div>
           ))
         ) : (
-          <p style={{ color: COLORS.primary, fontSize: '0.9rem' }}>{t('no_comments_yet') || 'Henüz yorum yapmadınız.'}</p>
+          <p style={{ color: '#fff', fontSize: '1.1rem', textAlign: 'center', opacity: 0.9 }}>{t('no_comments_yet') || 'Henüz yorum yapmadınız.'}</p>
         )}
       </div>
     </div>

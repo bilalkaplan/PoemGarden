@@ -2,14 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const COLORS = {
-  primary: '#2d2d2d',
-  secondary: '#e6e7e8',
-  tertiary: '#6b8e6f',
-  dark: '#919D85',
-  darkBg: '#738065',
-};
-
 function Login() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -30,53 +22,62 @@ function Login() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', textAlign: 'center', color: COLORS.primary, backgroundColor: COLORS.dark, minHeight: '100vh', padding: '20px' }}>
-      <h2 style={{ color: COLORS.primary, marginBottom: '30px' }}>{t('login')}</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <input 
-          name="email" 
-          type="email" 
-          placeholder={t('email')} 
-          onChange={handleChange} 
-          required 
-          style={{ padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem' }} 
-        />
-        <div style={{ position: 'relative' }}>
-          <input
-            name="password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder={t('password')}
-            onChange={handleChange}
-            required
-            style={{ padding: '10px', width: '100%', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem', boxSizing: 'border-box' }}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: 'absolute',
-              right: '5px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: COLORS.secondary,
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              padding: '6px 8px'
-            }}
-          >
-            {showPassword ? t('hide_password') : t('show_password')}
-          </button>
-        </div>
-        <button 
-          type="submit" 
-          style={{ padding: '10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 'bold' }}
-        >
+    <div className="blog-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <div className="blog-card" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
+        <h2 style={{ fontFamily: 'var(--font-sans)', textAlign: 'center', marginBottom: '32px', color: 'var(--text-main)', fontSize: '1.8rem' }}>
           {t('login')}
-        </button>
-      </form>
+        </h2>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div>
+            <input 
+              name="email" 
+              type="email" 
+              placeholder={t('email')} 
+              onChange={handleChange} 
+              required 
+              className="blog-input"
+              style={{ marginBottom: 0 }}
+            />
+          </div>
+          <div style={{ position: 'relative' }}>
+            <input
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder={t('password')}
+              onChange={handleChange}
+              required
+              className="blog-input"
+              style={{ marginBottom: 0, paddingRight: '40px' }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                padding: '4px'
+              }}
+            >
+              {showPassword ? 'Gizle' : 'Göster'}
+            </button>
+          </div>
+          <button 
+            type="submit" 
+            className="blog-btn blog-btn-primary"
+            style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '1.05rem' }}
+          >
+            {t('login')}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

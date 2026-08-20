@@ -3,14 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const COLORS = {
-  primary: '#2d2d2d',
-  secondary: '#e6e7e8',
-  tertiary: '#6b8e6f',
-  dark: '#919D85',
-  darkBg: '#738065',
-};
-
 function Register() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ firstName: '', lastName: '', nickname: '', email: '', password: '' });
@@ -50,80 +42,93 @@ function Register() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', textAlign: 'center', color: COLORS.primary, backgroundColor: COLORS.dark, minHeight: '100vh', padding: '20px' }}>
-      <h2 style={{ color: COLORS.primary, marginBottom: '30px' }}>{t('register')}</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <input 
-          name="firstName" 
-          placeholder={t('first_name')} 
-          onChange={handleChange} 
-          required 
-          style={{ padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem' }} 
-        />
-        <input 
-          name="lastName" 
-          placeholder={t('last_name')} 
-          onChange={handleChange} 
-          required 
-          style={{ padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem' }} 
-        />
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
-          <span style={{ padding: '10px', fontSize: '1.1rem', fontWeight: 'bold', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px 0 0 5px', color: COLORS.primary }}>@</span>
+    <div className="blog-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '85vh' }}>
+      <div className="blog-card" style={{ width: '100%', maxWidth: '450px', padding: '40px' }}>
+        <h2 style={{ fontFamily: 'var(--font-sans)', textAlign: 'center', marginBottom: '32px', color: 'var(--text-main)', fontSize: '1.8rem' }}>
+          {t('register')}
+        </h2>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <input 
+              name="firstName" 
+              placeholder={t('first_name')} 
+              onChange={handleChange} 
+              required 
+              className="blog-input"
+              style={{ marginBottom: 0, flex: 1 }}
+            />
+            <input 
+              name="lastName" 
+              placeholder={t('last_name')} 
+              onChange={handleChange} 
+              required 
+              className="blog-input"
+              style={{ marginBottom: 0, flex: 1 }}
+            />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ padding: '14px 16px', fontSize: '1.1rem', fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.08)', borderRight: 'none', borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)', color: 'var(--text-muted)' }}>@</span>
+            <input 
+              name="nickname" 
+              placeholder={t('username')} 
+              onChange={handleChange} 
+              required 
+              className="blog-input"
+              style={{ flex: 1, marginBottom: 0, borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }} 
+            />
+          </div>
           <input 
-            name="nickname" 
-            placeholder={t('username')} 
+            name="email" 
+            type="email" 
+            placeholder={t('email')} 
             onChange={handleChange} 
             required 
-            style={{ flex: 1, padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '0 5px 5px 0', color: COLORS.primary, fontSize: '0.95rem' }} 
+            className="blog-input"
+            style={{ marginBottom: 0 }}
           />
-        </div>
-        <input 
-          name="email" 
-          type="email" 
-          placeholder={t('email')} 
-          onChange={handleChange} 
-          required 
-          style={{ padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem' }} 
-        />
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <input
-            name="password"
-            type="password"
-            placeholder={t('password')}
-            onChange={handleChange}
-            onFocus={() => setPasswordFocused(true)}
-            onBlur={() => setPasswordFocused(!!formData.password)}
-            required
-            style={{ flex: 1, padding: '10px', backgroundColor: COLORS.darkBg, border: `1px solid ${COLORS.secondary}`, borderRadius: '5px', color: COLORS.primary, fontSize: '0.95rem' }}
-          />
+          <div style={{ position: 'relative' }}>
+            <input
+              name="password"
+              type="password"
+              placeholder={t('password')}
+              onChange={handleChange}
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(!!formData.password)}
+              required
+              className="blog-input"
+              style={{ marginBottom: 0, width: '100%' }}
+            />
+          </div>
+          
           {showPasswordInfo && (
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '8px',
-              backgroundColor: passwordValid ? '#2d5a2d' : '#5a5033',
-              border: `1px solid ${passwordValid ? COLORS.secondary : COLORS.tertiary}`,
-              color: passwordValid ? '#c3f0c3' : '#f5ddb8',
-              padding: '10px 12px',
-              borderRadius: '8px',
+              gap: '12px',
+              backgroundColor: passwordValid ? 'rgba(72, 187, 120, 0.1)' : 'rgba(237, 137, 54, 0.1)',
+              border: `1px solid ${passwordValid ? 'rgba(72, 187, 120, 0.4)' : 'rgba(237, 137, 54, 0.4)'}`,
+              color: passwordValid ? '#276749' : '#9c4221',
+              padding: '12px 16px',
+              borderRadius: 'var(--radius-sm)',
               fontSize: '0.85rem',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-              whiteSpace: 'normal',
-              minWidth: '260px'
+              lineHeight: 1.4
             }}>
               <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{passwordValid ? '✅' : '⚠️'}</span>
               <span>{passwordValid ? t('password_valid') : t('password_requirements')}</span>
             </div>
           )}
-        </div>
-        <button 
-          type="submit" 
-          style={{ padding: '10px', backgroundColor: COLORS.secondary, color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 'bold' }}
-        >
-          {t('register')}
-        </button>
-        {serverError && <p style={{ color: '#ff9999', fontSize: '0.95rem' }}>{serverError}</p>}
-      </form>
+
+          <button 
+            type="submit" 
+            className="blog-btn blog-btn-primary"
+            style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '1.05rem' }}
+          >
+            {t('register')}
+          </button>
+          
+          {serverError && <p style={{ color: 'var(--danger)', fontSize: '0.95rem', textAlign: 'center', marginTop: '8px' }}>{serverError}</p>}
+        </form>
+      </div>
     </div>
   );
 }
