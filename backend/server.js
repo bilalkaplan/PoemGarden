@@ -17,9 +17,31 @@ const MONGO_URI = process.env.MONGO_URI;
 
 console.log("Sunucu başlatılmaya çalışılıyor...");
 
-mongoose.connect(MONGO_URI)
-    .then(() => console.log('>>> MONGODB BAĞLANTISI BAŞARILI! <<<'))
-    .catch((err) => console.error('>>> MONGODB BAĞLANTI HATASI: <<<', err));
+const connectDB = async () => {
+    if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+        return;
+    }
+    try {
+        await mongoose.connect(MONGO_URI, { dbName: 'poemgarden' });
+        console.log('>>> MONGODB BAĞLANTISI BAŞARILI! <<<');
+    } catch (err) {
+        console.error('>>> MONGODB BAĞLANTI HATASI: <<<', err);
+        setTimeout(connectDB, 5000);
+    }
+};
+
+connectDB();
+
+mongoose.connection.on('disconnected', () => {
+    setTimeout(connectDB, 5000);
+});
+
+app.use(async (req, res, next) => {
+    if (mongoose.connection.readyState === 0) {
+        await connectDB();
+    }
+    next();
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/poems', poemRoutes);
