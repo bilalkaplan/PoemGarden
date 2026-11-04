@@ -1,5 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://bilalkapl4n_db_user:gR3g74RFe8yBVO1d@cluster0.inuc53g.mongodb.net/poemgarden?appName=Cluster0";
+const uri = process.env.MONGO_URI;
 
 async function check() {
   await mongoose.connect(uri);
