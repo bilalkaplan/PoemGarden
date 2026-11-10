@@ -5,6 +5,13 @@ import { Link } from 'react-router-dom';
 
 const DEFAULT_AVATAR = "/default-avatar.svg";
 
+const resolveAvatar = (avatar) => {
+  if (!avatar || avatar.includes('via.placeholder.com') || avatar.includes('<svg')) {
+    return DEFAULT_AVATAR;
+  }
+  return avatar;
+};
+
 function CommentSection({ poem, user, onUpdate, setToast }) {
   const { t } = useTranslation();
   const [commentInput, setCommentInput] = useState('');
@@ -120,7 +127,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
             <div key={comment._id} className="comment-box">
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '4px' }}>
                 <img
-                  src={comment.author?.avatar || DEFAULT_AVATAR}
+                  src={resolveAvatar(comment.author?.avatar)}
                   alt="Commenter"
                   onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
                   style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}
@@ -162,7 +169,7 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
                   {comment.replies.map(reply => (
                     <div key={reply._id} style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                       <img
-                        src={reply.author?.avatar || DEFAULT_AVATAR}
+                        src={resolveAvatar(reply.author?.avatar)}
                         alt="Replier"
                         onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
                         style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}

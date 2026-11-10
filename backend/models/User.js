@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     nickname: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 6 },
-    bio: { type: String, default: 'Edebiyat aşığı.' },
-    avatar: { type: String, default: 'https://via.placeholder.com/150' },
+    bio: { type: String, default: '' },
+    avatar: { type: String, default: '/default-avatar.svg' },
     role: { type: String, enum: ['poet', 'admin'], default: 'poet' },
     notifications: [notificationSchema]
 }, { timestamps: true });

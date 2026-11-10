@@ -3,10 +3,23 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 
+const DEFAULT_AVATAR = "/default-avatar.svg";
+
+const resolveAvatar = (avatar) => {
+  if (!avatar || avatar.includes('via.placeholder.com') || avatar.includes('<svg')) {
+    return DEFAULT_AVATAR;
+  }
+  return avatar;
+};
+
+const cleanBio = (bio) => {
+  if (!bio || bio === 'Edebiyat aşığı.') return '';
+  return bio;
+};
+
 function Profile() {
   const { t, i18n } = useTranslation();
   const { id } = useParams();
-  const DEFAULT_AVATAR = "/default-avatar.svg";
   const [user, setUser] = useState(null);
   const [myPoems, setMyPoems] = useState([]);
   const [myComments, setMyComments] = useState([]);
@@ -27,19 +40,44 @@ function Profile() {
       try {
         if (isOwnProfile) {
           if (storedUser) {
-            setUser(storedUser);
+            const sanitizedStored = {
+              ...storedUser,
+              bio: cleanBio(storedUser.bio),
+              avatar: resolveAvatar(storedUser.avatar)
+            };
+            setUser(sanitizedStored);
             setEditData({
-              firstName: storedUser.firstName,
-              lastName: storedUser.lastName,
-              bio: storedUser.bio || 'Edebiyat aşığı.',
-              avatar: storedUser.avatar || ''
+              firstName: sanitizedStored.firstName,
+              lastName: sanitizedStored.lastName,
+              bio: sanitizedStored.bio,
+              avatar: sanitizedStored.avatar
             });
             fetchMyPoems(storedUser._id);
             fetchMyComments(storedUser._id);
+
+            try {
+              const freshRes = await axios.get(`https://poemgarden.onrender.com/api/auth/user/${storedUser._id}`);
+              if (freshRes.data) {
+                const merged = {
+                  ...sanitizedStored,
+                  ...freshRes.data,
+                  bio: cleanBio(freshRes.data.bio),
+                  avatar: resolveAvatar(freshRes.data.avatar)
+                };
+                setUser(merged);
+                localStorage.setItem('user', JSON.stringify(merged));
+              }
+            } catch {
+              // Ignore background refresh error
+            }
           }
         } else {
           const userRes = await axios.get(`https://poemgarden.onrender.com/api/auth/user/${id}`);
-          setUser(userRes.data);
+          setUser({
+            ...userRes.data,
+            bio: cleanBio(userRes.data?.bio),
+            avatar: resolveAvatar(userRes.data?.avatar)
+          });
           fetchMyPoems(id);
           fetchMyComments(id);
         }
@@ -134,14 +172,17 @@ function Profile() {
       firstName: editData.firstName,
       lastName: editData.lastName,
       bio: editData.bio,
-      avatar: editData.avatar
+      avatar: resolveAvatar(editData.avatar)
     };
     setUser(updatedUser);
     localStorage.setItem('user', JSON.stringify(updatedUser));
     setIsEditing(false);
 
     try {
-      await axios.put(`https://poemgarden.onrender.com/api/auth/profile`, editData, {
+      await axios.put(`https://poemgarden.onrender.com/api/auth/profile`, {
+        ...editData,
+        avatar: resolveAvatar(editData.avatar)
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       });
     } catch (err) {
@@ -156,6 +197,8 @@ function Profile() {
     return <div style={{ textAlign: 'center', color: '#fff', padding: '40px', fontSize: '1.1rem', minHeight: '100vh' }}>{t('loading')}</div>;
   }
 
+  const displayBio = cleanBio(user.bio);
+
   return (
     <div className="blog-container">
       <div className="hero-header">
@@ -166,7 +209,7 @@ function Profile() {
       <div className="blog-card" style={{ marginBottom: '40px', padding: '36px' }}>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
           <img
-            src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR}
+            src={resolveAvatar(user.avatar)}
             alt=""
             onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
             style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(94, 126, 98, 0.25)', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
@@ -174,11 +217,13 @@ function Profile() {
           <div>
             <h2 className="blog-title" style={{ fontSize: '1.75rem', margin: 0 }}>{user.nickname}</h2>
             {user.createdAt && (
-              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '4px 0 10px 0', fontStyle: 'italic' }}>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '4px 0 6px 0', fontStyle: 'italic' }}>
                 {t('joined_in', { date: new Date(user.createdAt).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }) })}
               </p>
             )}
-            <p style={{ fontSize: '1.02rem', margin: '6px 0 0', color: 'var(--text-main)', lineHeight: 1.5 }}>{user.bio}</p>
+            {displayBio && (
+              <p style={{ fontSize: '1.02rem', margin: '8px 0 0', color: 'var(--text-main)', lineHeight: 1.5 }}>{displayBio}</p>
+            )}
           </div>
         </div>
 
@@ -242,9 +287,12 @@ function Profile() {
                 onChange={handleAvatarUpload}
                 style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}
               />
-              {editData.avatar && !editData.avatar.includes('<svg') && (
-                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginTop: '16px', border: '2px solid rgba(0,0,0,0.08)', display: 'block' }} />
-              )}
+              <img
+                src={resolveAvatar(editData.avatar)}
+                alt=""
+                onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+                style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginTop: '16px', border: '2px solid rgba(0,0,0,0.08)', display: 'block' }}
+              />
             </div>
             <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
               <button type="submit" className="blog-btn blog-btn-primary" style={{ padding: '10px 20px' }}>{t('save')}</button>

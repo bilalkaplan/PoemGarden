@@ -6,6 +6,13 @@ import CommentSection from './CommentSection';
 
 const DEFAULT_AVATAR = "/default-avatar.svg";
 
+const resolveAvatar = (avatar) => {
+  if (!avatar || avatar.includes('via.placeholder.com') || avatar.includes('<svg')) {
+    return DEFAULT_AVATAR;
+  }
+  return avatar;
+};
+
 function PoemCard({ poem, user, onUpdate, setToast }) {
   const { t, i18n } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -64,7 +71,7 @@ function PoemCard({ poem, user, onUpdate, setToast }) {
         <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
           <Link to={`/profile/${poem.author?._id}`}>
             <img
-              src={poem.author?.avatar || DEFAULT_AVATAR}
+              src={resolveAvatar(poem.author?.avatar)}
               alt="Author"
               onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
               style={{
