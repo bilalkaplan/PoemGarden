@@ -28,8 +28,8 @@ function Profile() {
         if (isOwnProfile) {
           if (storedUser) {
             setUser(storedUser);
-            setEditData({ 
-              firstName: storedUser.firstName, 
+            setEditData({
+              firstName: storedUser.firstName,
               lastName: storedUser.lastName,
               bio: storedUser.bio || 'Edebiyat aşığı.',
               avatar: storedUser.avatar || ''
@@ -62,7 +62,7 @@ function Profile() {
   const fetchMyComments = async (userId) => {
     try {
       const res = await axios.get(`https://poemgarden.onrender.com/api/poems/user/${userId}/comments`, {
-          headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` }
       });
       setMyComments(res.data);
     } catch (err) {
@@ -128,10 +128,10 @@ function Profile() {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
-    
-    const updatedUser = { 
-      ...user, 
-      firstName: editData.firstName, 
+
+    const updatedUser = {
+      ...user,
+      firstName: editData.firstName,
       lastName: editData.lastName,
       bio: editData.bio,
       avatar: editData.avatar
@@ -149,9 +149,8 @@ function Profile() {
     }
   };
 
-
-  const fonts = ['Lora', 'Georgia', 'Merriweather', 'Arial', 'Times New Roman'];
-  const MAX_PREVIEW_LENGTH = 150;
+  const fonts = ['Lora', 'Georgia', 'Merriweather', 'Times New Roman', 'Arial'];
+  const MAX_PREVIEW_LENGTH = 200;
 
   if (!user) {
     return <div style={{ textAlign: 'center', color: '#fff', padding: '40px', fontSize: '1.1rem', minHeight: '100vh' }}>{t('loading')}</div>;
@@ -159,32 +158,40 @@ function Profile() {
 
   return (
     <div className="blog-container">
-      <h1 className="blog-title" style={{ color: '#fff', marginBottom: '32px', fontSize: '2.5rem', textAlign: 'center' }}>{t('profile')}</h1>
+      <div className="hero-header">
+        <h1 className="hero-title">{t('profile')}</h1>
+        <div className="hero-divider" />
+      </div>
 
-      <div className="blog-card" style={{ marginBottom: '40px', padding: '40px' }}>
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', marginBottom: '24px' }}>
-          <img src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(0,0,0,0.05)' }} />
+      <div className="blog-card" style={{ marginBottom: '40px', padding: '36px' }}>
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
+          <img
+            src={user.avatar && !user.avatar.includes('<svg') ? user.avatar : DEFAULT_AVATAR}
+            alt=""
+            onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+            style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(94, 126, 98, 0.25)', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}
+          />
           <div>
-            <h2 className="blog-title" style={{ fontSize: '1.8rem', margin: 0 }}>{user.nickname}</h2>
+            <h2 className="blog-title" style={{ fontSize: '1.75rem', margin: 0 }}>{user.nickname}</h2>
             {user.createdAt && (
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '4px 0 12px 0', fontStyle: 'italic' }}>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: '4px 0 10px 0', fontStyle: 'italic' }}>
                 {t('joined_in', { date: new Date(user.createdAt).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' }) })}
               </p>
             )}
-            <p style={{ fontSize: '1.05rem', margin: '8px 0', color: 'var(--text-main)', lineHeight: 1.5 }}>{user.bio}</p>
+            <p style={{ fontSize: '1.02rem', margin: '6px 0 0', color: 'var(--text-main)', lineHeight: 1.5 }}>{user.bio}</p>
           </div>
         </div>
 
         {!isEditing || !isOwnProfile ? (
-          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+          <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
             <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('first_name')}:</strong> {user.firstName}</p>
             <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('last_name')}:</strong> {user.lastName}</p>
             <p style={{ fontSize: '0.95rem', margin: '8px 0', color: 'var(--text-main)' }}><strong>{t('email')}:</strong> {user.email}</p>
-            
-            <div style={{ marginTop: '24px', display: 'flex', gap: '12px' }}>
+
+            <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
               {isOwnProfile && (
-                <button 
-                  onClick={() => setIsEditing(true)} 
+                <button
+                  onClick={() => setIsEditing(true)}
                   className="blog-btn blog-btn-secondary"
                   style={{ padding: '8px 16px' }}
                 >
@@ -192,8 +199,8 @@ function Profile() {
                 </button>
               )}
               {!isOwnProfile && storedUser?.role === 'admin' && (
-                <button 
-                  onClick={handleDeleteUser} 
+                <button
+                  onClick={handleDeleteUser}
                   className="blog-btn blog-btn-danger"
                   style={{ padding: '8px 16px' }}
                 >
@@ -203,43 +210,43 @@ function Profile() {
             </div>
           </div>
         ) : (
-          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+          <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
             <div style={{ display: 'flex', gap: '12px' }}>
-              <input 
-                value={editData.firstName} 
+              <input
+                value={editData.firstName}
                 onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}
                 placeholder={t('first_name')}
                 className="blog-input"
                 style={{ flex: 1, marginBottom: 0 }}
               />
-              <input 
-                value={editData.lastName} 
+              <input
+                value={editData.lastName}
                 onChange={(e) => setEditData({ ...editData, lastName: e.target.value })}
                 placeholder={t('last_name')}
                 className="blog-input"
                 style={{ flex: 1, marginBottom: 0 }}
               />
             </div>
-            <textarea 
-              value={editData.bio} 
+            <textarea
+              value={editData.bio}
               onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
               placeholder={t('bio') || 'Biyografi'}
               className="blog-textarea"
               style={{ minHeight: '80px', marginBottom: 0 }}
             />
-            <div style={{ padding: '16px', backgroundColor: 'rgba(0,0,0,0.02)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(0,0,0,0.05)' }}>
-              <label style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block', marginBottom: '12px', fontWeight: 500 }}>{t('profile_photo') || 'Profil Fotoğrafı (Zorunlu Değil)'}</label>
-              <input 
+            <div style={{ padding: '16px', backgroundColor: 'var(--card-surface)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(0,0,0,0.06)' }}>
+              <label style={{ fontSize: '0.95rem', color: 'var(--text-main)', display: 'block', marginBottom: '12px', fontWeight: 500 }}>{t('profile_photo') || 'Profil Fotoğrafı'}</label>
+              <input
                 type="file"
                 accept="image/*"
                 onChange={handleAvatarUpload}
                 style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}
               />
               {editData.avatar && !editData.avatar.includes('<svg') && (
-                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginTop: '16px', border: '2px solid rgba(0,0,0,0.05)', display: 'block' }} />
+                <img src={editData.avatar} alt="" onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginTop: '16px', border: '2px solid rgba(0,0,0,0.08)', display: 'block' }} />
               )}
             </div>
-            <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
               <button type="submit" className="blog-btn blog-btn-primary" style={{ padding: '10px 20px' }}>{t('save')}</button>
               <button type="button" onClick={() => setIsEditing(false)} className="blog-btn blog-btn-ghost" style={{ padding: '10px 20px' }}>{t('cancel')}</button>
             </div>
@@ -251,26 +258,26 @@ function Profile() {
         <h2 className="blog-title" style={{ color: '#fff', marginBottom: '24px', fontSize: '1.8rem', textAlign: 'center' }}>
           {isOwnProfile ? t('my_poems') || 'My Poems' : t('user_poems_title', { nickname: user.nickname }) || `${user.nickname}'s Poems`}
         </h2>
-        
+
         {myPoems.length > 0 ? (
           myPoems.map(poem => {
             const isExpanded = expandedPoem === poem._id;
             const shouldTruncate = poem.content.length > MAX_PREVIEW_LENGTH;
             const displayContent = isExpanded ? poem.content : poem.content.substring(0, MAX_PREVIEW_LENGTH);
-            
+
             return (
               <article key={poem._id} className="blog-card">
                 {editingPoemId === poem._id ? (
                   <form onSubmit={handleUpdatePoem} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <input 
-                      value={editPoemData.title} 
+                    <input
+                      value={editPoemData.title}
                       onChange={(e) => setEditPoemData({ ...editPoemData, title: e.target.value })}
                       placeholder={t('poem_title')}
                       className="blog-input"
-                      style={{ fontSize: '1.2rem', fontFamily: 'var(--font-sans)', marginBottom: 0 }}
+                      style={{ fontSize: '1.2rem', fontFamily: editPoemData.font || 'var(--font-serif)', marginBottom: 0 }}
                     />
-                    <textarea 
-                      value={editPoemData.content} 
+                    <textarea
+                      value={editPoemData.content}
                       onChange={(e) => setEditPoemData({ ...editPoemData, content: e.target.value })}
                       placeholder={t('poem_content')}
                       className="blog-textarea"
@@ -278,8 +285,8 @@ function Profile() {
                     />
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                       <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Font:</span>
-                      <select 
-                        value={editPoemData.font} 
+                      <select
+                        value={editPoemData.font}
                         onChange={(e) => setEditPoemData({ ...editPoemData, font: e.target.value })}
                         className="blog-select"
                         style={{ width: 'auto', marginBottom: 0, padding: '8px 12px' }}
@@ -296,21 +303,27 @@ function Profile() {
                   </form>
                 ) : (
                   <>
-                    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(0,0,0,0.04)', paddingBottom: '16px', marginBottom: '24px' }}>
-                      <h3 className="blog-title" style={{ margin: 0, fontSize: '1.4rem' }}>{poem.title}</h3>
-                      <div style={{ position: 'relative' }}>
+                    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(0,0,0,0.05)', paddingBottom: '14px', marginBottom: '18px' }}>
+                      <div>
+                        <h3 className="blog-title" style={{ margin: 0, fontSize: '1.4rem' }}>{poem.title}</h3>
+                        <span className="meta-date">
+                          {new Date(poem.createdAt).toLocaleDateString(i18n.language)}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }}>
+                        {poem.font && <span className="meta-badge" style={{ fontFamily: poem.font }}>{poem.font}</span>}
                         <button onClick={() => setOpenMenuId(openMenuId === poem._id ? null : poem._id)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '1.5rem', cursor: 'pointer', padding: '0 8px', lineHeight: 1 }}>⋮</button>
                         {openMenuId === poem._id && (
                           <div style={{ position: 'absolute', right: 0, top: '100%', backgroundColor: '#fff', borderRadius: '8px', padding: '8px 0', zIndex: 10, boxShadow: 'var(--shadow-md)', minWidth: '180px', border: '1px solid rgba(0,0,0,0.05)' }}>
-                            <button 
+                            <button
                               onClick={() => {
                                 navigator.clipboard.writeText(window.location.origin + '/?open=' + poem._id);
                                 if (toast) toast({ message: t('link_copied') || 'Bağlantı kopyalandı!', type: 'success' });
                                 setOpenMenuId(null);
                               }}
                               style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%', padding: '10px 16px', background: 'none', border: 'none', color: 'var(--text-main)', textAlign: 'left', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'var(--font-sans)' }}
-                              onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(0,0,0,0.03)'}
-                              onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.03)'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                             >
                               🔗 {t('copy_link') || 'Bağlantıyı Kopyala'}
                             </button>
@@ -318,13 +331,16 @@ function Profile() {
                         )}
                       </div>
                     </header>
-                    <p className="poem-content" style={{ fontFamily: poem.font === 'Arial' || !poem.font ? 'var(--font-serif)' : poem.font }}>
-                      {displayContent}
-                      {shouldTruncate && !isExpanded && '...'}
-                    </p>
+                    <div className="poem-stage">
+                      <span className="poem-quote-mark">“</span>
+                      <p className="poem-content" style={{ fontFamily: poem.font === 'Arial' || !poem.font ? 'var(--font-serif)' : poem.font }}>
+                        {displayContent}
+                        {shouldTruncate && !isExpanded && '...'}
+                      </p>
+                    </div>
                     {shouldTruncate && (
-                      <div style={{ textAlign: 'center', margin: '24px 0' }}>
-                        <button 
+                      <div style={{ textAlign: 'center', margin: '18px 0' }}>
+                        <button
                           onClick={() => setExpandedPoem(isExpanded ? null : poem._id)}
                           className="blog-btn blog-btn-secondary"
                           style={{ padding: '6px 16px', fontSize: '0.85rem', borderRadius: '20px' }}
@@ -333,19 +349,16 @@ function Profile() {
                         </button>
                       </div>
                     )}
-                    <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '16px', borderTop: '1px solid rgba(0,0,0,0.04)', paddingTop: '16px' }}>
-                      {t('date')}: {new Date(poem.createdAt).toLocaleDateString(i18n.language)}
-                    </div>
                     {isOwnProfile && (
-                      <div style={{ marginTop: '16px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-                        <button 
+                      <div style={{ marginTop: '12px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                        <button
                           onClick={() => handleEditPoem(poem)}
                           className="blog-btn blog-btn-secondary"
                           style={{ padding: '6px 12px', fontSize: '0.85rem' }}
                         >
                           {t('edit')}
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleDeletePoem(poem._id)}
                           className="blog-btn blog-btn-ghost"
                           style={{ padding: '6px 12px', fontSize: '0.85rem', color: 'var(--danger)' }}
@@ -364,13 +377,13 @@ function Profile() {
         )}
       </div>
 
-      <div style={{ marginTop: '64px' }}>
+      <div style={{ marginTop: '56px' }}>
         <h2 className="blog-title" style={{ color: '#fff', marginBottom: '24px', fontSize: '1.8rem', textAlign: 'center' }}>{t('my_comments') || 'Yorumlarım'}</h2>
         {myComments.length > 0 ? (
           myComments.map(comment => (
             <div key={comment._id} className="blog-card" style={{ padding: '24px' }}>
               {comment.type === 'reply' && comment.parentCommentText && (
-                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '12px', paddingLeft: '12px', borderLeft: '3px solid rgba(0,0,0,0.1)' }}>
+                <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', marginBottom: '12px', paddingLeft: '12px', borderLeft: '3px solid var(--accent)' }}>
                   "{comment.parentCommentText}"
                 </div>
               )}
@@ -378,11 +391,11 @@ function Profile() {
                 {comment.text}
                 {comment.edited && <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '8px', fontStyle: 'italic' }}>{t('edited_tag') || '(Düzenlendi)'}</span>}
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(0,0,0,0.04)', paddingTop: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(0,0,0,0.05)', paddingTop: '14px' }}>
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  {new Date(comment.createdAt).toLocaleDateString()}
+                  {new Date(comment.createdAt).toLocaleDateString(i18n.language)}
                 </span>
-                <Link to="/" style={{ textDecoration: 'none' }}>
+                <Link to={comment.poemId ? `/?open=${comment.poemId}` : '/'} style={{ textDecoration: 'none' }}>
                   <button className="blog-btn blog-btn-secondary" style={{ padding: '6px 12px', fontSize: '0.85rem' }}>
                     {t('go_to_poem')} "{comment.poemTitle}"
                   </button>

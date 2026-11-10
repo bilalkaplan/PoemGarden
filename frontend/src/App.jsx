@@ -7,13 +7,9 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
 
-const COLORS = {
-  dark: '#919D85',
-};
-
 function App() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', backgroundColor: COLORS.dark, minHeight: '100vh' }}>
+    <div className="app-shell">
       <Navbar />
       <div style={{ flex: 1 }}>
         <Routes>
