@@ -29,12 +29,12 @@ function Login() {
         </h2>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <input 
-              name="email" 
-              type="email" 
-              placeholder={t('email')} 
-              onChange={handleChange} 
-              required 
+            <input
+              name="email"
+              type="email"
+              placeholder={t('email')}
+              onChange={handleChange}
+              required
               className="blog-input"
               style={{ marginBottom: 0 }}
             />
@@ -47,7 +47,7 @@ function Login() {
               onChange={handleChange}
               required
               className="blog-input"
-              style={{ marginBottom: 0, paddingRight: '40px' }}
+              style={{ marginBottom: 0, paddingRight: '76px' }}
             />
             <button
               type="button"
@@ -66,11 +66,11 @@ function Login() {
                 padding: '4px'
               }}
             >
-              {showPassword ? 'Gizle' : 'Göster'}
+              {showPassword ? t('hide') : t('show')}
             </button>
           </div>
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="blog-btn blog-btn-primary"
             style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '1.05rem' }}
           >

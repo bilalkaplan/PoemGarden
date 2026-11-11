@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 function Register() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ firstName: '', lastName: '', nickname: '', email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [serverError, setServerError] = useState('');
   const navigate = useNavigate();
@@ -16,8 +17,7 @@ function Register() {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
-    
-    // Ad ve soyad alanlarında (tüm dünya dilleri dahil) sadece harf, boşluk ve tireye izin ver
+
     if (name === 'firstName' || name === 'lastName') {
       value = value.replace(/[^\p{L}\s-]/gu, '');
     }
@@ -49,57 +49,76 @@ function Register() {
         </h2>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <input 
-              name="firstName" 
-              placeholder={t('first_name')} 
-              onChange={handleChange} 
-              required 
+            <input
+              name="firstName"
+              placeholder={t('first_name')}
+              onChange={handleChange}
+              required
               className="blog-input"
               style={{ marginBottom: 0, flex: 1 }}
             />
-            <input 
-              name="lastName" 
-              placeholder={t('last_name')} 
-              onChange={handleChange} 
-              required 
+            <input
+              name="lastName"
+              placeholder={t('last_name')}
+              onChange={handleChange}
+              required
               className="blog-input"
               style={{ marginBottom: 0, flex: 1 }}
             />
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ padding: '14px 16px', fontSize: '1.1rem', fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.05)', border: '1px solid rgba(0,0,0,0.08)', borderRight: 'none', borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)', color: 'var(--text-muted)' }}>@</span>
-            <input 
-              name="nickname" 
-              placeholder={t('username')} 
-              onChange={handleChange} 
-              required 
+            <span style={{ padding: '13px 16px', fontSize: '1.05rem', fontWeight: 'bold', backgroundColor: 'rgba(0,0,0,0.05)', border: '1px solid rgba(36, 46, 40, 0.12)', borderRight: 'none', borderRadius: 'var(--radius-sm) 0 0 var(--radius-sm)', color: 'var(--text-muted)' }}>@</span>
+            <input
+              name="nickname"
+              placeholder={t('username')}
+              onChange={handleChange}
+              required
               className="blog-input"
-              style={{ flex: 1, marginBottom: 0, borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }} 
+              style={{ flex: 1, marginBottom: 0, borderRadius: '0 var(--radius-sm) var(--radius-sm) 0' }}
             />
           </div>
-          <input 
-            name="email" 
-            type="email" 
-            placeholder={t('email')} 
-            onChange={handleChange} 
-            required 
+          <input
+            name="email"
+            type="email"
+            placeholder={t('email')}
+            onChange={handleChange}
+            required
             className="blog-input"
             style={{ marginBottom: 0 }}
           />
           <div style={{ position: 'relative' }}>
             <input
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder={t('password')}
               onChange={handleChange}
               onFocus={() => setPasswordFocused(true)}
               onBlur={() => setPasswordFocused(!!formData.password)}
               required
               className="blog-input"
-              style={{ marginBottom: 0, width: '100%' }}
+              style={{ marginBottom: 0, width: '100%', paddingRight: '76px' }}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '12px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                padding: '4px'
+              }}
+            >
+              {showPassword ? t('hide') : t('show')}
+            </button>
           </div>
-          
+
           {showPasswordInfo && (
             <div style={{
               display: 'flex',
@@ -118,14 +137,14 @@ function Register() {
             </div>
           )}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="blog-btn blog-btn-primary"
             style={{ width: '100%', padding: '12px', marginTop: '8px', fontSize: '1.05rem' }}
           >
             {t('register')}
           </button>
-          
+
           {serverError && <p style={{ color: 'var(--danger)', fontSize: '0.95rem', textAlign: 'center', marginTop: '8px' }}>{serverError}</p>}
         </form>
       </div>
