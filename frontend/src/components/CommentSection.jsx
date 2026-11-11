@@ -126,12 +126,14 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
           {poem.comments.map(comment => (
             <div key={comment._id} className="comment-box">
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '4px' }}>
-                <img
-                  src={resolveAvatar(comment.author?.avatar)}
-                  alt="Commenter"
-                  onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
-                  style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}
-                />
+                <Link to={`/profile/${comment.author?._id}`} style={{ flexShrink: 0, display: 'inline-flex' }}>
+                  <img
+                    src={resolveAvatar(comment.author?.avatar)}
+                    alt="Commenter"
+                    onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+                    style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer' }}
+                  />
+                </Link>
                 <div style={{ flex: 1 }}>
                   <Link to={`/profile/${comment.author?._id}`} style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600' }}>
                     <span style={{ fontSize: '0.92rem' }}>{comment.author?.nickname}</span>
@@ -168,12 +170,14 @@ function CommentSection({ poem, user, onUpdate, setToast }) {
                 <div style={{ marginTop: '10px', paddingLeft: '16px', borderLeft: '2px solid rgba(94, 126, 98, 0.25)' }}>
                   {comment.replies.map(reply => (
                     <div key={reply._id} style={{ marginBottom: '10px', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                      <img
-                        src={resolveAvatar(reply.author?.avatar)}
-                        alt="Replier"
-                        onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
-                        style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}
-                      />
+                      <Link to={`/profile/${reply.author?._id}`} style={{ flexShrink: 0, display: 'inline-flex' }}>
+                        <img
+                          src={resolveAvatar(reply.author?.avatar)}
+                          alt="Replier"
+                          onError={(e) => { e.target.onerror = null; e.target.src = DEFAULT_AVATAR; }}
+                          style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover', border: '1px solid rgba(0,0,0,0.08)', cursor: 'pointer' }}
+                        />
+                      </Link>
                       <div style={{ flex: 1 }}>
                         <Link to={`/profile/${reply.author?._id}`} style={{ textDecoration: 'none', color: 'var(--text-main)', fontWeight: '600' }}>
                           <span style={{ fontSize: '0.88rem' }}>{reply.author?.nickname}</span>

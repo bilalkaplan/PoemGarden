@@ -14,6 +14,6 @@ router.put('/:poemId/comments/:commentId', protect, updateComment);
 router.delete('/:poemId/comments/:commentId', protect, deleteComment);
 router.put('/:poemId/comments/:commentId/replies/:replyId', protect, updateReply);
 router.delete('/:poemId/comments/:commentId/replies/:replyId', protect, deleteReply);
-router.get('/user/:userId/comments', protect, getUserComments);
+router.get('/user/:userId/comments', getUserComments);
 
 module.exports = router;
