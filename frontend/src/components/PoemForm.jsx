@@ -6,7 +6,8 @@ function PoemForm({ onSuccess, setToast }) {
   const { t } = useTranslation();
   const [newPoem, setNewPoem] = useState({ title: '', content: '', font: 'Lora' });
   const [isOpen, setIsOpen] = useState(true);
-  const token = localStorage.getItem('token');
+  const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
+  const token = localStorage.getItem('token') || storedUser?.token;
   const fonts = ['Lora', 'Georgia', 'Merriweather', 'Times New Roman', 'Arial'];
 
   const handleAddPoem = async (e) => {
@@ -19,7 +20,8 @@ function PoemForm({ onSuccess, setToast }) {
       if (onSuccess) onSuccess();
       if (setToast) setToast({ message: t('poem_added') || 'Şiir eklendi', type: 'success' });
     } catch (error) {
-      if (setToast) setToast({ message: t('poem_add_failed') || 'Şiir eklenirken hata oluştu.', type: 'error' });
+      const serverMsg = error.response?.data?.message;
+      if (setToast) setToast({ message: serverMsg || t('poem_add_failed') || 'Şiir eklenirken hata oluştu.', type: 'error' });
     }
   };
 
