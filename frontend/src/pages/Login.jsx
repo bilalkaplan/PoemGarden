@@ -23,7 +23,7 @@ function Login() {
 
   return (
     <div className="blog-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
-      <div className="blog-card" style={{ width: '100%', maxWidth: '400px', padding: '40px' }}>
+      <div className="blog-card auth-card">
         <h2 style={{ fontFamily: 'var(--font-sans)', textAlign: 'center', marginBottom: '32px', color: 'var(--text-main)', fontSize: '1.8rem' }}>
           {t('login')}
         </h2>

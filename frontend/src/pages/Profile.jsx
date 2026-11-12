@@ -206,7 +206,7 @@ function Profile() {
         <div className="hero-divider" />
       </div>
 
-      <div className="blog-card" style={{ marginBottom: '40px', padding: '36px' }}>
+      <div className="blog-card profile-card">
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap' }}>
           <img
             src={resolveAvatar(user.avatar)}
@@ -256,7 +256,7 @@ function Profile() {
           </div>
         ) : (
           <form onSubmit={handleUpdateProfile} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="form-row-2col">
               <input
                 value={editData.firstName}
                 onChange={(e) => setEditData({ ...editData, firstName: e.target.value })}

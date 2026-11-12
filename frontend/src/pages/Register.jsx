@@ -43,12 +43,12 @@ function Register() {
 
   return (
     <div className="blog-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '85vh' }}>
-      <div className="blog-card" style={{ width: '100%', maxWidth: '450px', padding: '40px' }}>
+      <div className="blog-card auth-card" style={{ maxWidth: '450px' }}>
         <h2 style={{ fontFamily: 'var(--font-sans)', textAlign: 'center', marginBottom: '32px', color: 'var(--text-main)', fontSize: '1.8rem' }}>
           {t('register')}
         </h2>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="form-row-2col">
             <input
               name="firstName"
               placeholder={t('first_name')}

@@ -2,13 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const COLORS = {
-  secondary: '#e6e7e8',
-  dark: '#919D85',
-  darkBg: '#738065',
-  primary: '#2d2d2d'
-};
-
 function Notifications() {
   const { t } = useTranslation();
   const [notifications, setNotifications] = useState([]);
@@ -38,7 +31,9 @@ function Notifications() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications(notifications.map(n => n._id === notifId ? { ...n, read: true } : n));
-      window.location.href = `/?open=${poemId}`;
+      if (poemId) {
+        window.location.href = `/?open=${poemId}`;
+      }
     } catch (err) {
       console.error("Bildirim okunamadı:", err);
     }
@@ -50,35 +45,35 @@ function Notifications() {
     <div style={{ position: 'relative' }}>
       <button
         onClick={() => setShowDropdown(!showDropdown)}
+        className="blog-btn"
         style={{
-          padding: '6px 12px',
-          borderRadius: '4px',
-          border: `1px solid ${COLORS.secondary}`,
-          backgroundColor: COLORS.dark,
-          color: 'white',
-          cursor: 'pointer',
-          fontSize: '0.95rem',
-          fontWeight: 'bold',
+          padding: '8px 12px',
+          backgroundColor: 'rgba(255,255,255,0.18)',
+          border: '1px solid rgba(255,255,255,0.28)',
+          color: '#fff',
           position: 'relative'
         }}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
         {unreadCount > 0 && (
           <span
             style={{
               position: 'absolute',
               top: '-5px',
               right: '-5px',
-              backgroundColor: '#c41c1c',
-              color: 'white',
+              backgroundColor: 'var(--danger)',
+              color: '#fff',
               borderRadius: '50%',
-              width: '20px',
-              height: '20px',
+              width: '19px',
+              height: '19px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '0.75rem',
-              fontWeight: 'bold'
+              fontSize: '0.72rem',
+              fontWeight: 700
             }}
           >
             {unreadCount}
@@ -87,54 +82,40 @@ function Notifications() {
       </button>
 
       {showDropdown && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-            marginTop: '8px',
-            backgroundColor: COLORS.darkBg,
-            border: `1px solid ${COLORS.secondary}`,
-            borderRadius: '6px',
-            minWidth: '300px',
-            maxHeight: '400px',
-            overflowY: 'auto',
-            zIndex: 1000,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-          }}
-        >
+        <div className="notif-dropdown">
           {notifications.length === 0 ? (
-            <div style={{ padding: '12px', color: '#E6E6FA', fontSize: '0.85rem' }}>
+            <div style={{ padding: '16px', color: 'var(--text-muted)', fontSize: '0.88rem', textAlign: 'center' }}>
               {t('no_notifications')}
             </div>
           ) : (
             notifications.map(notif => (
               <div
                 key={notif._id}
-                onClick={() => handleMarkRead(notif._id, notif.poem._id)}
+                onClick={() => handleMarkRead(notif._id, notif.poem?._id)}
                 style={{
-                  padding: '10px 12px',
-                  borderBottom: `1px solid ${COLORS.dark}`,
+                  padding: '12px 14px',
+                  borderBottom: '1px solid rgba(0,0,0,0.06)',
                   cursor: 'pointer',
-                  backgroundColor: notif.read ? COLORS.dark : '#5a5245',
-                  transition: 'background-color 0.2s',
+                  backgroundColor: notif.read ? 'transparent' : 'rgba(79, 111, 84, 0.08)',
+                  transition: 'background-color 0.15s',
                   display: 'flex',
                   justifyContent: 'space-between',
-                  alignItems: 'center'
+                  alignItems: 'center',
+                  gap: '10px'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#6b5d52'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = notif.read ? COLORS.dark : '#5a5245'}
               >
-                <div style={{ flex: 1 }}>
-                  <small style={{ color: '#E6E6FA', fontWeight: 'bold', fontSize: '0.85rem' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ color: 'var(--text-main)', fontWeight: 600, fontSize: '0.86rem' }}>
                     {notif.from?.nickname}
-                  </small>
-                  <div style={{ color: '#E6E6FA', fontSize: '0.85rem', marginTop: '2px' }}>
+                  </div>
+                  <div style={{ color: 'var(--text-main)', fontSize: '0.84rem', marginTop: '2px' }}>
                     {notif.message}
                   </div>
-                  <div style={{ color: '#D8BFD8', fontSize: '0.8rem', marginTop: '2px', fontStyle: 'italic' }}>
-                    "{notif.poem?.title}"
-                  </div>
+                  {notif.poem?.title && (
+                    <div style={{ color: 'var(--accent)', fontSize: '0.8rem', marginTop: '2px', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      "{notif.poem.title}"
+                    </div>
+                  )}
                 </div>
                 {!notif.read && (
                   <div
@@ -142,8 +123,8 @@ function Notifications() {
                       width: '8px',
                       height: '8px',
                       borderRadius: '50%',
-                      backgroundColor: '#E6E6FA',
-                      marginLeft: '8px'
+                      backgroundColor: 'var(--accent)',
+                      flexShrink: 0
                     }}
                   />
                 )}
