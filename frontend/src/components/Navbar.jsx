@@ -66,12 +66,10 @@ function Navbar() {
       </div>
 
       <div className="nav-right nav-links">
-        {['tr', 'en', 'sr', 'de'].map(lang => {
+        {['tr', 'en'].map(lang => {
           const flagUrls = {
             tr: 'https://flagcdn.com/w20/tr.png',
-            en: 'https://flagcdn.com/w20/gb.png',
-            sr: 'https://flagcdn.com/w20/rs.png',
-            de: 'https://flagcdn.com/w20/de.png'
+            en: 'https://flagcdn.com/w20/gb.png'
           };
           const isActive = i18n.language === lang;
           return (

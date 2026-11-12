@@ -10,7 +10,7 @@ PoemGarden is a full-stack web application constructed with the MERN stack (Mong
 - **Framework:** React.js initialized via Vite for optimized build processing and hot module replacement.
 - **Routing:** React Router DOM manages client-side navigation without page reloads.
 - **State Management & Data Fetching:** React Hooks (`useState`, `useEffect`) combined with Axios for asynchronous HTTP requests to the backend API.
-- **Internationalization (i18n):** `i18next` is integrated for real-time localization. Supported locales include English (EN), Turkish (TR), Serbian (SR), and German (DE). The language state is globally accessible and persists across sessions.
+- **Internationalization (i18n):** `i18next` is integrated for real-time localization. Supported locales include Turkish (TR) and English (EN). The language state is globally accessible and persists across sessions.
 - **Styling:** A custom CSS methodology is employed, utilizing native CSS variables for color tokenization and consistent theming. The design system strictly relies on standard CSS rather than utility-first frameworks.
 
 ### Backend Layer
